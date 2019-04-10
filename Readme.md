@@ -1,7 +1,7 @@
 # Личный проект «YetiCave»
 
 * Студент: [Вероника Шиян](https://up.htmlacademy.ru/php/9/user/104625).
-* Наставник: `Неизвестно`.
+* Наставник: [Сергей Андрианов](https://htmlacademy.ru/profile/id1045171).
 
 ---
 
