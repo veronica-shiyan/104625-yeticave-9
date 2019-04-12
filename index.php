@@ -2,6 +2,8 @@
 $is_auth = rand(0, 1);
 
 $user_name = 'Veronica';
+
+$users_name = ['Skier', 'Snowboarder', 'Bigfoot', 'Main_Yeti'];
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -27,14 +29,13 @@ $user_name = 'Veronica';
         <a class="main-header__add-lot button" href="pages/add-lot.html">Добавить лот</a>
 
         <nav class="user-menu">
-            <?php if ($is_auth === 1) {?>
+            <?php if ($is_auth === 1) :?>
             <div class="user-menu__logged">
                 <p> <?php echo $user_name ?> </p>
                 <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
                 <a class="user-menu__logout" href="#">Выход</a>
             </div>
-            <?php }
-            else {?>
+            <?php else : ?>
             <ul class="user-menu__list">
                 <li class="user-menu__item">
                     <a href="#">Регистрация</a>
@@ -43,7 +44,7 @@ $user_name = 'Veronica';
                     <a href="#">Вход</a>
                 </li>
             </ul>
-            <?php } ?>
+            <?php endif; ?>
         </nav>
     </div>
 </header>
@@ -57,6 +58,14 @@ $user_name = 'Veronica';
             <li class="promo__item promo__item--boards">
                 <a class="promo__link" href="pages/all-lots.html">Имя категории</a>
             </li>
+        </ul>
+    </section>
+    <section class="users">
+        <h2 class="users__title">Авторизированные пользователи</h2>
+        <ul class="users__list">
+            <?php foreach ($users_name as $value) : ?>
+                <li class="users__item"><?php print $value ?></li>
+            <?php endforeach; ?>
         </ul>
     </section>
     <section class="lots">
