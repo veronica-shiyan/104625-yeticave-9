@@ -34,6 +34,7 @@ $lots = [
         'url' => 'img/lot-6.jpg'
     ]
 ];
+
 function price_format ($number) {
     $number = ceil($number);
 
