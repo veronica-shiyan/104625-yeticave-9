@@ -34,6 +34,15 @@ $lots = [
         'url' => 'img/lot-6.jpg'
     ]
 ];
+function price_format ($number) {
+    $number = ceil($number);
+
+    if ($number > 1000) {
+        $number = number_format($number, 0, '', ' ');
+    };
+
+    return $number . '  &#8381';
+};
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -107,7 +116,7 @@ $lots = [
                         <div class="lot__state">
                             <div class="lot__rate">
                                 <span class="lot__amount">Стартовая цена</span>
-                                <span class="lot__cost"><?php echo $value['price'] ?><b class="rub">р</b></span>
+                                <span class="lot__cost"><?php echo price_format($value['price']) ?></span>
                             </div>
                             <div class="lot__timer timer">
                                 12:23
