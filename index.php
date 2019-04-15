@@ -6,34 +6,47 @@ $lots = [
         [   'name' => '2014 Rossignol District Snowboard',
             'categories' => 'Доски и лыжи',
             'price' => 10999,
-            'url' => 'img/lot-1.jpg'
+            'url' => 'img/lot-1.jpg',
+            'is_active' => rand(0, 1)
         ],
     [   'name' => 'DC Ply Mens 2016/2017 Snowboard',
         'categories' => 'Доски и лыжи',
         'price' => 159999,
-        'url' => 'img/lot-2.jpg'
+        'url' => 'img/lot-2.jpg',
+        'is_active' => rand(0, 1)
     ],
     [   'name' => 'Крепления Union Contact Pro 2015 года размер L/XL',
         'categories' => 'Крепления',
         'price' => 8000,
-        'url' => 'img/lot-3.jpg'
+        'url' => 'img/lot-3.jpg',
+        'is_active' => rand(0, 1)
     ],
     [   'name' => 'Ботинки для сноуборда DC Mutiny Charocal',
         'categories' => 'Ботинки',
         'price' => 10999,
-        'url' => 'img/lot-4.jpg'
+        'url' => 'img/lot-4.jpg',
+        'is_active' => rand(0, 1)
     ],
     [   'name' => 'Куртка для сноуборда DC Mutiny Charocal',
         'categories' => 'Одежда',
         'price' => 7500,
-        'url' => 'img/lot-5.jpg'
+        'url' => 'img/lot-5.jpg',
+        'is_active' => rand(0, 1)
     ],
     [   'name' => 'Маска Oakley Canopy',
         'categories' => 'Разное',
         'price' => 5400,
-        'url' => 'img/lot-6.jpg'
+        'url' => 'img/lot-6.jpg',
+        'is_active' => rand(0, 1)
     ]
 ];
+function price_format ($number) {
+    $number = ceil($number);
+    if ($number > 1000) {
+        $number = number_format($number, 0, '', ' ');
+    };
+    return $number . '  &#8381';
+};
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -97,6 +110,7 @@ $lots = [
         </div>
         <ul class="lots__list">
             <?php foreach ($lots as $value ) :?>
+            <?php if ($value['is_active']) :?>
                 <li class="lots__item lot">
                     <div class="lot__image">
                         <img src="<?php echo $value['url'] ?>" width="350" height="260" alt="">
@@ -107,7 +121,7 @@ $lots = [
                         <div class="lot__state">
                             <div class="lot__rate">
                                 <span class="lot__amount">Стартовая цена</span>
-                                <span class="lot__cost"><?php echo $value['price'] ?><b class="rub">р</b></span>
+                                <span class="lot__cost"><?php echo price_format($value['price']) ?></span>
                             </div>
                             <div class="lot__timer timer">
                                 12:23
@@ -115,6 +129,7 @@ $lots = [
                         </div>
                     </div>
                 </li>
+            <?php endif; ?>
             <?php endforeach; ?>
         </ul>
     </section>
