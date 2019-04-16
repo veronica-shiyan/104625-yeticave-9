@@ -40,8 +40,10 @@ $lots = [
         'is_active' => rand(0, 1)
     ]
 ];
+
 function price_format ($number) {
     $number = ceil($number);
+
     if ($number > 1000) {
         $number = number_format($number, 0, '', ' ');
     };
