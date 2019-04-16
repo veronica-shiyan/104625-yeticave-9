@@ -6,32 +6,38 @@ $lots = [
         [   'name' => '2014 Rossignol District Snowboard',
             'categories' => 'Доски и лыжи',
             'price' => 10999,
-            'url' => 'img/lot-1.jpg'
+            'url' => 'img/lot-1.jpg',
+            'is_active' => rand(0, 1)
         ],
     [   'name' => 'DC Ply Mens 2016/2017 Snowboard',
         'categories' => 'Доски и лыжи',
         'price' => 159999,
-        'url' => 'img/lot-2.jpg'
+        'url' => 'img/lot-2.jpg',
+        'is_active' => rand(0, 1)
     ],
     [   'name' => 'Крепления Union Contact Pro 2015 года размер L/XL',
         'categories' => 'Крепления',
         'price' => 8000,
-        'url' => 'img/lot-3.jpg'
+        'url' => 'img/lot-3.jpg',
+        'is_active' => rand(0, 1)
     ],
     [   'name' => 'Ботинки для сноуборда DC Mutiny Charocal',
         'categories' => 'Ботинки',
         'price' => 10999,
-        'url' => 'img/lot-4.jpg'
+        'url' => 'img/lot-4.jpg',
+        'is_active' => rand(0, 1)
     ],
     [   'name' => 'Куртка для сноуборда DC Mutiny Charocal',
         'categories' => 'Одежда',
         'price' => 7500,
-        'url' => 'img/lot-5.jpg'
+        'url' => 'img/lot-5.jpg',
+        'is_active' => rand(0, 1)
     ],
     [   'name' => 'Маска Oakley Canopy',
         'categories' => 'Разное',
         'price' => 5400,
-        'url' => 'img/lot-6.jpg'
+        'url' => 'img/lot-6.jpg',
+        'is_active' => rand(0, 1)
     ]
 ];
 
@@ -106,8 +112,15 @@ function price_format ($number) {
             <h2>Открытые лоты</h2>
         </div>
         <ul class="lots__list">
-            <?php foreach ($lots as $value ) :?>
-                <li class="lots__item lot">
+            <?php foreach ($lots as $key => $value ) :?>
+            <?php if ($value['is_active']) :?>
+                <li class="lots__item lot"
+                    <?php if ($key % 2 === 1) :?>
+                        style="background-color: #240e38"
+                    <?php else :?>
+                        style="background-color: #c9c0da"
+                    <?php endif; ?>
+                >
                     <div class="lot__image">
                         <img src="<?php echo $value['url'] ?>" width="350" height="260" alt="">
                     </div>
@@ -125,6 +138,7 @@ function price_format ($number) {
                         </div>
                     </div>
                 </li>
+                <?php endif; ?>
             <?php endforeach; ?>
         </ul>
     </section>
