@@ -115,7 +115,7 @@ function price_format ($number) {
             <?php foreach ($lots as $key => $value ) :?>
             <?php if ($value['is_active']) :?>
                 <li class="lots__item lot"
-                    <?php if ($key % 2 === 1) :?>
+                    <?php if ($key % 2) :?>
                         style="background-color: #240e38"
                     <?php else :?>
                         style="background-color: #c9c0da"
