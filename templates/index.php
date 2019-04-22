@@ -27,11 +27,9 @@
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost"><?php echo price_format(esc($value['price'])) ?></span>
                         </div>
-                        <div class="lot__timer timer <?php if ($seconds_to_midnight <= $lots_warning_time) :?>
-                                timer--finishing
-                            <?php endif; ?>"
-                        >
-                            <?= timeFormat($time_lot_ending['hours'], $time_lot_ending['minutes']);?>
+                        <div class="lot__timer timer <?=check_warning_time(strtotime('tomorrow')) ? 'timer--finishing' : '' ?>">
+                            <?=calculate_time_lot_ending(strtotime('tomorrow'));?>
+                        </div>
                     </div>
                 </div>
             </li>
