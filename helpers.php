@@ -143,4 +143,38 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
+// Функция для форматирования цены
+function price_format($number) {
+    $number = ceil($number);
 
+    if ($number > 1000) {
+        $number = number_format($number, 0, '', ' ');
+    };
+
+    return $number . '  &#8381';
+};
+
+// Функция для обрезки тегов в получаемом от пользователя тексте
+function esc($str)
+{
+    $text = strip_tags($str);
+    return $text;
+};
+
+// Функции для выведения времени до окончания лота
+function calculate_time_lot_ending ($ending_time) {
+    $seconds_to_ending = $ending_time - time();
+    $hours = floor($seconds_to_ending / 3600);
+    $minutes = floor(($seconds_to_ending % 3600) / 60);
+    return sprintf('%02d:%02d', $hours, $minutes);
+}
+
+function check_warning_time ($ending_time) {
+    $seconds_to_ending = $ending_time - time();
+    if ($seconds_to_ending < 3600) {
+        return true;
+    }
+    else {
+        false;
+    }
+}
