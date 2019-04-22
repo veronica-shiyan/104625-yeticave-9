@@ -11,12 +11,12 @@ symbol_code CHAR
 
 CREATE TABLE lots (
 id INT AUTO_INCREMENT PRIMARY KEY,
-date_create TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 name CHAR NOT NULL,
 description TEXT NOT NULL,
 image CHAR NOT NULL,
 starting_price INT NOT NULL,
-date_completion TIMESTAMP,
+completed_at TIMESTAMP,
 bet_step INT NOT NULL
 );
 CREATE INDEX date_create ON lots(date_create);
@@ -25,7 +25,7 @@ CREATE INDEX date_completion ON lots(date_completion);
 
 CREATE TABLE bets (
 id INT AUTO_INCREMENT PRIMARY KEY,
-date_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 price INT
 );
 CREATE INDEX date_add ON bets(date_add);
@@ -33,7 +33,7 @@ CREATE INDEX price ON bets(price);
 
 CREATE TABLE users (
 id INT AUTO_INCREMENT PRIMARY KEY,
-date_registration TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 email CHAR NOT NULL UNIQUE,
 login CHAR NOT NULL UNIQUE,
 password CHAR NOT NULL UNIQUE,
