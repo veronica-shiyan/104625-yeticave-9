@@ -178,3 +178,10 @@ function check_warning_time ($ending_time) {
         false;
     }
 }
+
+// Функция для выведения ошибки при запросе к БД
+function show_queries_error ($error) {
+    $content = include_template('error.php', ['error' => $error]);
+    print($content);
+    die;
+}
