@@ -185,3 +185,16 @@ function show_queries_error ($error) {
     print($content);
     die;
 }
+
+// Функция для получения массива данных из БД
+function get_data_array ($link, $sql) {
+    $result = mysqli_query($link, $sql);
+
+    if ($result) {
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    else {
+        show_queries_error(mysqli_error($link));
+        return null;
+    }
+};

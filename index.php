@@ -5,36 +5,16 @@ require_once('data.php');
 $link = mysqli_connect("localhost", "root", "", "yeticave");
 mysqli_set_charset($link, "utf8");
 
-if (!$link) {
-    show_queries_error(mysqli_connect_error());
-}
-else {
-    $sql = 'SELECT * FROM categories';
-    $result = mysqli_query($link, $sql);
-
-    if ($result) {
-        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    }
-    else {
-        show_queries_error(mysqli_error($link));
-        $content = include_template('error.php', ['error' => $error]);
-    }
-};
-
-if (!$link) {
-    show_queries_error(mysqli_connect_error());
-}
-else {
-    $sql = 'SELECT * FROM lots 
+$sql_categories = 'SELECT * FROM categories';
+$sql_lots = 'SELECT * FROM lots 
 INNER JOIN categories ON lots.category_id = categories.id';
-    $result = mysqli_query($link, $sql);
 
-    if ($result) {
-        $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    }
-    else {
-        show_queries_error(mysqli_error($link));
-    }
+if (!$link) {
+    show_queries_error(mysqli_connect_error());
+}
+else {
+    $categories = get_data_array ($link, $sql_categories);
+    $lots = get_data_array ($link, $sql_lots);
 };
 
 $content = include_template('index.php', [
