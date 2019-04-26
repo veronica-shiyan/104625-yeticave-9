@@ -12,7 +12,7 @@ symbol_code CHAR (50)
 CREATE TABLE lots (
 id INT AUTO_INCREMENT PRIMARY KEY,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-name CHAR (255) NOT NULL,
+title CHAR (255) NOT NULL,
 description TEXT NOT NULL,
 image CHAR (50) NOT NULL,
 starting_price INT NOT NULL,
