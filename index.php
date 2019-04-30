@@ -6,8 +6,8 @@ $link = mysqli_connect("localhost", "root", "", "yeticave");
 mysqli_set_charset($link, "utf8");
 
 $sql_categories = 'SELECT * FROM categories';
-$sql_lots = 'SELECT * FROM lots 
-INNER JOIN categories ON lots.category_id = categories.id';
+$sql_lots = 'SELECT * FROM categories 
+INNER JOIN lots ON lots.category_id = categories.id';
 
 if (!$link) {
     show_queries_error(mysqli_connect_error());
