@@ -1,6 +1,6 @@
 <?php
 $title = 'Главная';
-$is_auth = rand(0, 1);
+$is_auth = 0/*rand(0, 1)*/;
 $user_name = 'Veronica';
 $categories = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
 $lots = [

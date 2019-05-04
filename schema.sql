@@ -42,7 +42,7 @@ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 email CHAR (65) NOT NULL UNIQUE,
 login CHAR (65) NOT NULL UNIQUE,
 password CHAR (255) NOT NULL UNIQUE,
-avatar CHAR (255) NOT NULL,
+avatar CHAR (255),
 contact TEXT NOT NULL
 );
 CREATE INDEX created_at ON users(created_at);
