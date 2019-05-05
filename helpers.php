@@ -154,6 +154,17 @@ function price_format($number) {
     return $number . '  &#8381';
 };
 
+function price_format_no_currency($number) {
+    $number = ceil($number);
+
+    if ($number > 1000) {
+        $number = number_format($number, 0, '', ' ');
+    };
+
+    return $number;
+};
+
+
 // Функция для обрезки тегов в получаемом от пользователя тексте
 function esc($str)
 {
