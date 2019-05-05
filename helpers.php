@@ -190,6 +190,14 @@ function check_warning_time ($ending_time) {
     }
 }
 
+function price_format_no_currency($number) {
+    $number = ceil($number);
+    if ($number > 1000) {
+        $number = number_format($number, 0, '', ' ');
+    };
+    return $number;
+};
+
 // Функция для выведения ошибки при запросе к БД
 function show_queries_error ($error) {
     $content = include_template('error.php', ['error' => $error]);

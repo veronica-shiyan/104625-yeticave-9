@@ -21,6 +21,7 @@ SET created_at = NOW(), title = 'Куртка для сноуборда DC Mutin
 INSERT INTO lots
 SET created_at = NOW(), title = 'Маска Oakley Canopy', description = 'Горнолыжная маска Oakley Canopy идеально подходит для катания в солнечную погоду.', image = 'img/lot-6.jpg', starting_price = 5400, completed_at = (created_at + INTERVAL 16 HOUR), bet_step = 100, user_id = 1, category_id = 6;
 
+
 INSERT INTO bets
 SET created_at = FROM_UNIXTIME(1555761000), price = 11499, user_id = 2, lot_id = 1;
 INSERT INTO bets
