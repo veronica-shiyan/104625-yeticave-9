@@ -1,17 +1,5 @@
 <?php
-require_once('helpers.php');
-require_once('data.php');
-
-$link = mysqli_connect("localhost", "root", "", "yeticave");
-mysqli_set_charset($link, "utf8");
-
-$sql_categories = 'SELECT * FROM categories';
-
-if (!$link) {
-    show_queries_error(mysqli_connect_error());
-} else {
-    $categories = get_data_array($link, $sql_categories);
-};
+require_once('init.php');
 
 $content = include_template('sign_up.php', [
     'categories' => $categories
@@ -85,12 +73,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$layout_content = include_template('layout.php', [
+$layout_data = [
     'content' => $content,
     'title' => 'Регистрация',
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
-    'categories' => $categories
-]);
-
-print($layout_content);
+    'is_auth' => false,
+    'user_name' => '',
+    'categories' => $categories,
+    'main_classname' => null
+];
+create_layout ($layout_data);

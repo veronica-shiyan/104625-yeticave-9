@@ -2,11 +2,11 @@ INSERT INTO categories (name, symbol_code)
 VALUES ('Доски и лыжи', 'boards'), ('Крепления', 'attachment'), ('Ботинки', 'boots'), ('Одежда', 'clothing'), ('Инструменты', 'tools'), ('Разное', 'other');
 
 INSERT INTO users
-SET created_at = NOW(), email = 'bigfoot@yandex.ru', login = 'Bigfoot', password = '%4ItlRYyekb^', avatar = '', contact = '';
+SET created_at = NOW(), email = 'bigfoot@yandex.ru', login = 'Bigfoot', password = '$2y$10$yOclgovE5V0SWiygs4xBbeFZblXpzC1K/40Ft/FBMD7SnTuq0tzKa', avatar = '', contact = '';
 INSERT INTO users
-SET created_at = NOW(), email = 'main_Yeti@mail.ru', login = 'Main_Yeti', password = 'a%P7dXlZRA6^', avatar = '', contact = '';
+SET created_at = NOW(), email = 'main_Yeti@mail.ru', login = 'Main_Yeti', password = '$2y$10$cM5nVoQjSTr2fId0M4CtsOMevkabSfSuk5ms3p48zFQSqme/V65We', avatar = '', contact = '';
 INSERT INTO users
-SET created_at = NOW(), email = 'skier@gmail.com', login = 'Skier', password = 'UoVB&*vv*@1i', avatar = '', contact = '';
+SET created_at = NOW(), email = 'skier@gmail.com', login = 'Skier', password = '$2y$10$ouRSc5wOHsasV/799.lNiOYnlhr5.e5IXzu.WR/aZQ2v0h.pxziD2', avatar = '', contact = '';
 
 INSERT INTO lots
 SET created_at = NOW(), title = '2014 Rossignol District Snowboard', description = 'Сноуборд DISTRICT AMPTEK от известного французского производителя ROSSIGNOL, разработанный специально для начинающих фрирайдеров. Эта доска отлично подойдёт как для обычного склона, так и для парка, а также для обучения. В доступном по цене сноуборде DISTRICT AMPTEK применены современные технологии, которые удачно сочетаются, обеспечивая при этом отличные рабочие характеристики и комфорт. Он оптимален для тех, кто хочет быстро повысить свой уровень техники и мастерства. Классическая твин-тип форма позволяет кататься в разных стойках. За устойчивость и стабильность отвечает стандартный прогиб, он гарантирует жесткую хватку кантов. Высокие рокеры Amptek Auto-Turn обеспечивают легкость управления доской и четкое вхождение в повороты.', image = 'img/lot-1.jpg', starting_price = 10999, completed_at = (created_at + INTERVAL 1 HOUR), bet_step = 500, user_id = 1, category_id = 1;

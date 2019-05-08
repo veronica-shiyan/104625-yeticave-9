@@ -1,22 +1,13 @@
 <?php
-require_once('helpers.php');
-require_once('data.php');
-
-$link = mysqli_connect("localhost", "root", "", "yeticave");
-mysqli_set_charset($link, "utf8");
-
-$sql_categories = 'SELECT * FROM categories';
+require_once('init.php');
 
 $id = isset($_GET['tab']) ? (int)$_GET['tab'] : 0;
-$sql_lot = 'SELECT * FROM lots 
-INNER JOIN categories ON lots.category_id = categories.id
-WHERE lots.id = ' . $id;
-
 if (!$link) {
     show_queries_error(mysqli_connect_error());
 } else {
-    $categories = get_data_array($link, $sql_categories);
-    $lots = get_data_array($link, $sql_lot);
+    $lots = get_data_array($link, 'SELECT * FROM lots 
+INNER JOIN categories ON lots.category_id = categories.id
+WHERE lots.id = ' . $id);
 };
 
 if ($lots) {
@@ -25,25 +16,26 @@ if ($lots) {
         'categories' => $categories,
         'lot' => $lot
     ]);
-    $layout_content = include_template('layout.php', [
+    $layout_data = [
         'content' => $content,
         'title' => $lot['title'],
-        'is_auth' => $is_auth,
-        'user_name' => $user_name,
+        'is_auth' => isset($_SESSION['user']) ? true : false,
+        'user_name' => isset($_SESSION['user']) ? $_SESSION['user']['login'] : '',
         'categories' => $categories,
-        'lot' => $lot
-    ]);
+        'lot' => $lot,
+        'main_classname' => null
+    ];
 } else {
-    $content = include_template('404.php', [
-        'categories' => $categories
-    ]);
-    $layout_content = include_template('layout.php', [
+    header('HTTP/1.0 404 Not Found');
+    $content = include_template('404.php', []);
+    $layout_data = [
         'content' => $content,
         'title' => '404 Страница не найдена',
-        'is_auth' => $is_auth,
-        'user_name' => $user_name,
-        'categories' => $categories
-    ]);
+        'is_auth' => isset($_SESSION['user']) ? true : false,
+        'user_name' => isset($_SESSION['user']) ? $_SESSION['user']['login'] : '',
+        'categories' => $categories,
+        'main_classname' => null
+    ];
 }
 
-print($layout_content);
+create_layout($layout_data);

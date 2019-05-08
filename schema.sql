@@ -5,16 +5,16 @@ USE yeticave;
 
 CREATE TABLE categories (
 id INT AUTO_INCREMENT PRIMARY KEY,
-name CHAR (50),
-symbol_code CHAR (50)
+name VARCHAR (50),
+symbol_code VARCHAR (50)
 );
 
 CREATE TABLE lots (
 id INT AUTO_INCREMENT PRIMARY KEY,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-title CHAR (255) NOT NULL,
+title VARCHAR (255) NOT NULL,
 description TEXT NOT NULL,
-image CHAR (50) NOT NULL,
+image VARCHAR (50) NOT NULL,
 starting_price INT NOT NULL,
 completed_at TIMESTAMP,
 bet_step INT NOT NULL,
@@ -39,10 +39,10 @@ CREATE INDEX price ON bets(price);
 CREATE TABLE users (
 id INT AUTO_INCREMENT PRIMARY KEY,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-email CHAR (65) NOT NULL UNIQUE,
-login CHAR (65) NOT NULL UNIQUE,
-password CHAR (255) NOT NULL UNIQUE,
-avatar CHAR (255),
+email VARCHAR (65) NOT NULL UNIQUE,
+login VARCHAR (65) NOT NULL UNIQUE,
+password VARCHAR (255) NOT NULL UNIQUE,
+avatar VARCHAR (255),
 contact TEXT NOT NULL
 );
 CREATE INDEX created_at ON users(created_at);
