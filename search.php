@@ -47,6 +47,7 @@ $layout_data = [
     'user_name' =>  isset($_SESSION['user']) ? $_SESSION['user']['login'] : '',
     'categories' => $categories,
     'lots' => $lots,
-    'main_classname' => ''
+    'main_classname' => '',
+    'search' => $search
 ];
 create_layout ($layout_data);
