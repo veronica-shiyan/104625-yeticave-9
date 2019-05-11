@@ -25,6 +25,8 @@ category_id INT
 CREATE INDEX created_at ON lots(created_at);
 CREATE INDEX starting_price ON lots(starting_price);
 CREATE INDEX completed_at ON lots(completed_at);
+CREATE FULLTEXT INDEX title ON lots(title);
+CREATE FULLTEXT INDEX lots_fulltext_search ON lots(title, description);
 
 CREATE TABLE bets (
 id INT AUTO_INCREMENT PRIMARY KEY,
