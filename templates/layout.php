@@ -13,24 +13,27 @@
 <div class="page-wrapper">
 
     <header class="main-header">
-        <div class="main-header__container container">
+        <div class="main-header__container container" style="align-items: center">
             <h1 class="visually-hidden">YetiCave</h1>
-            <a class="main-header__logo">
+            <a class="main-header__logo" href="index.php">
                 <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
             </a>
-            <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru" autocomplete="off">
+            <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru" autocomplete="off" style="width: auto; flex-grow: 1">
                 <input type="search" name="search" placeholder="Поиск лота">
                 <input class="main-header__search-btn" type="submit" name="find" value="Найти">
             </form>
             <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
 
-            <nav class="user-menu">
+            <nav class="user-menu" style="align-items: center">
                 <?php if ($is_auth) : ?>
                     <div class="user-menu__logged">
                         <p> <?php echo $user_name ?> </p>
-                        <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
-                        <a class="user-menu__logout" href="logout.php">Выход</a>
+                        <a class="user-menu__bets" href="/my_bets.php">Мои ставки</a>
+                        <a class="user-menu__logout" href="/logout.php">Выход</a>
                     </div>
+                    <a class="user-menu_avatar" href="#" style="margin-left: 15px">
+                        <img src="<?= $_SESSION['user']['avatar'] ?>" width="70" height="70" alt="Аватар" style="border-radius: 50%">
+                    </a>
                 <?php else : ?>
                     <ul class="user-menu__list">
                         <li class="user-menu__item">
@@ -53,7 +56,7 @@
             <ul class="promo__list">
                 <?php foreach ($categories as $index => $item) : ?>
                     <li class="promo__item <?= 'promo__item--' . $item['symbol_code'] ?>">
-                        <a class="promo__link" href="pages/all-lots.html"><?php echo esc($item['name']) ?></a>
+                        <a class="promo__link" href="all_lots.php?tab=<?= $item['id'] ?>"><?php echo esc($item['name']) ?></a>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -63,7 +66,7 @@
             <ul class="nav__list container">
                 <?php foreach ($categories as $index => $item) : ?>
                     <li class="nav__item">
-                        <a href="pages/all-lots.html"><?php echo $item['name'] ?></a>
+                        <a href="all_lots.php?tab=<?= $item['id'] ?>"><?php echo $item['name'] ?></a>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -78,7 +81,7 @@
         <ul class="nav__list container">
             <?php foreach ($categories as $index => $item) : ?>
                 <li class="nav__item">
-                    <a href="pages/all-lots.html"><?php echo $item['name'] ?></a>
+                    <a href="all_lots.php?tab=<?= $item['id'] ?>"><?php echo $item['name'] ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>
