@@ -28,7 +28,7 @@
     <?php if ($pages_count > 1): ?>
         <ul class="pagination-list">
             <li class="pagination-item pagination-item-prev">
-                <a href="<?php if ($current_page > 1) :?>all_lots.php?tab=<?= $lots[0]['category_id'] ?>&page=<?= ($current_page - 1); ?><?php endif; ?>">Назад</a>
+                <a href="<?php if ($current_page > 1) : ?>all_lots.php?tab=<?= $lots[0]['category_id'] ?>&page=<?= ($current_page - 1); ?><?php endif; ?>">Назад</a>
             </li>
             <?php foreach ($pages as $page): ?>
                 <li class="pagination-item <?php if ($page == $current_page): ?>pagination-item-active<?php endif; ?>">
@@ -36,7 +36,7 @@
                 </li>
             <?php endforeach; ?>
             <li class="pagination-item pagination-item-next">
-                <a href="<?php if ($current_page < count($pages)) :?>all_lots.php?tab=<?= $lots[0]['category_id'] ?>&page=<?= ($current_page + 1); ?><?php endif; ?>">Вперед</a>
+                <a href="<?php if ($current_page < count($pages)) : ?>all_lots.php?tab=<?= $lots[0]['category_id'] ?>&page=<?= ($current_page + 1); ?><?php endif; ?>">Вперед</a>
             </li>
         </ul>
     <?php endif; ?>

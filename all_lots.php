@@ -1,5 +1,5 @@
 <?php
-require_once('init.php');
+require_once('database.php');
 
 $this_time = time();
 
@@ -29,7 +29,7 @@ ORDER BY created_at DESC LIMIT ' . $page_items . ' OFFSET ' . $offset);
 };
 
 $content = include_template('all_lots.php', [
-    'categories' => $categories,
+    'categories' => get_categories($link),
     'lots' => $lots,
     'id' => $id,
     'pages_count' => $pages_count,
@@ -42,7 +42,7 @@ $layout_data = [
     'title' => 'Главная',
     'is_auth' => isset($_SESSION['user']) ? true : false,
     'user_name' => isset($_SESSION['user']) ? $_SESSION['user']['login'] : '',
-    'categories' => $categories,
+    'categories' => get_categories($link),
     'lots' => $lots,
     'main_classname' => ''
 ];

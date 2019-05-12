@@ -1,5 +1,5 @@
 <?php
-require_once('init.php');
+require_once('database.php');
 $this_time = time();
 
 if (!$link) {
@@ -32,7 +32,7 @@ ORDER BY created_at DESC LIMIT ' . $page_items . ' OFFSET ' . $offset;
     }
 }
 $content = include_template('search.php', [
-    'categories' => $categories,
+    'categories' => get_categories($link),
     'lots' => $lots,
     'search' => $search,
     'pages_count' => $pages_count,
@@ -44,10 +44,10 @@ $layout_data = [
     'content' => $content,
     'title' => 'Результаты поиска',
     'is_auth' => isset($_SESSION['user']) ? true : false,
-    'user_name' =>  isset($_SESSION['user']) ? $_SESSION['user']['login'] : '',
-    'categories' => $categories,
+    'user_name' => isset($_SESSION['user']) ? $_SESSION['user']['login'] : '',
+    'categories' => get_categories($link),
     'lots' => $lots,
     'main_classname' => '',
     'search' => $search
 ];
-create_layout ($layout_data);
+create_layout($layout_data);

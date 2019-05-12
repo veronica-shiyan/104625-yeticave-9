@@ -1,7 +1,8 @@
 <?php
-require_once('init.php');
+require_once('database.php');
 
 $id = isset($_GET['tab']) ? (int)$_GET['tab'] : 0;
+
 if (!$link) {
     show_queries_error(mysqli_connect_error());
 } else {
@@ -10,7 +11,7 @@ INNER JOIN users ON users.id = lots.user_id
 INNER JOIN categories ON lots.category_id = categories.id 
 WHERE lots.id = ' . $id);
 
-    $bets = get_data_array ($link, 'SELECT b.bets_created_at, b.price, b.bets_user_id, b.lot_id, u.login FROM bets as b 
+    $bets = get_data_array($link, 'SELECT b.bets_created_at, b.price, b.bets_user_id, b.lot_id, u.login FROM bets as b 
 INNER JOIN lots as l ON l.id = b.lot_id
 INNER JOIN  users as u ON u.id = b.bets_user_id  
 WHERE l.id = ' . $id . ' 
@@ -26,10 +27,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (empty($_POST['price'])) {
         $errors['price'] = 'Укажите Вашу ставку';
-    } else if (!is_numeric($_POST['price']) || $_POST['price'] % 1 !== 0) {
-        $errors['price'] = 'Ставка должна быть целым числом больше ноля';
-    } else if ($_POST['price'] < ($lot['starting_price'] + $lot['bet_step'])) {
-        $errors['price'] = 'Увеличьте Вашу ставку';
+    } else {
+        if (!is_numeric($_POST['price']) || $_POST['price'] % 1 !== 0) {
+            $errors['price'] = 'Ставка должна быть целым числом больше ноля';
+        } else {
+            if ($_POST['price'] < ($lot['starting_price'] + $lot['bet_step'])) {
+                $errors['price'] = 'Увеличьте Вашу ставку';
+            }
+        }
     }
 
     if (count($errors)) {
@@ -53,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 if ($lots) {
     $content = include_template('lot.php', [
-        'categories' => $categories,
+        'categories' => get_categories($link),
         'lot' => $lot,
         'errors' => isset($errors) ? $errors : null,
         'bets' => $bets
@@ -63,7 +68,7 @@ if ($lots) {
         'title' => $lot['title'],
         'is_auth' => isset($_SESSION['user']) ? true : false,
         'user_name' => isset($_SESSION['user']) ? $_SESSION['user']['login'] : '',
-        'categories' => $categories,
+        'categories' => get_categories($link),
         'lot' => $lot,
         'bets' => $bets,
         'main_classname' => null
@@ -76,7 +81,7 @@ if ($lots) {
         'title' => '404 Страница не найдена',
         'is_auth' => isset($_SESSION['user']) ? true : false,
         'user_name' => isset($_SESSION['user']) ? $_SESSION['user']['login'] : '',
-        'categories' => $categories,
+        'categories' => get_categories($link),
         'main_classname' => null
     ];
 }
