@@ -30,12 +30,12 @@ CREATE FULLTEXT INDEX lots_fulltext_search ON lots(title, description);
 
 CREATE TABLE bets (
 id INT AUTO_INCREMENT PRIMARY KEY,
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+bets_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 price INT,
-user_id INT NOT NULL,
+bets_user_id INT NOT NULL,
 lot_id INT NOT NULL
 );
-CREATE INDEX created_at ON bets(created_at);
+CREATE INDEX bets_created_at ON bets(bets_created_at);
 CREATE INDEX price ON bets(price);
 
 CREATE TABLE users (
@@ -44,7 +44,7 @@ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 email VARCHAR (65) NOT NULL UNIQUE,
 login VARCHAR (65) NOT NULL UNIQUE,
 password VARCHAR (255) NOT NULL UNIQUE,
-avatar VARCHAR (255),
+avatar VARCHAR (255) DEFAULT 'img/user.png',
 contact TEXT NOT NULL
 );
 CREATE INDEX created_at ON users(created_at);
