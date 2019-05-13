@@ -13,65 +13,12 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date) : bool {
+function is_date_valid(string $date): bool
+{
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
     return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
-}
-
-/**
- * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
- *
- * @param $link mysqli Ресурс соединения
- * @param $sql string SQL запрос с плейсхолдерами вместо значений
- * @param array $data Данные для вставки на место плейсхолдеров
- *
- * @return mysqli_stmt Подготовленное выражение
- */
-function db_get_prepare_stmt($link, $sql, $data = []) {
-    $stmt = mysqli_prepare($link, $sql);
-
-    if ($stmt === false) {
-        $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
-        die($errorMsg);
-    }
-
-    if ($data) {
-        $types = '';
-        $stmt_data = [];
-
-        foreach ($data as $value) {
-            $type = 's';
-
-            if (is_int($value)) {
-                $type = 'i';
-            }
-            else if (is_string($value)) {
-                $type = 's';
-            }
-            else if (is_double($value)) {
-                $type = 'd';
-            }
-
-            if ($type) {
-                $types .= $type;
-                $stmt_data[] = $value;
-            }
-        }
-
-        $values = array_merge([$stmt, $types], $stmt_data);
-
-        $func = 'mysqli_stmt_bind_param';
-        $func(...$values);
-
-        if (mysqli_errno($link) > 0) {
-            $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
-            die($errorMsg);
-        }
-    }
-
-    return $stmt;
 }
 
 /**
@@ -96,9 +43,9 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+function get_noun_plural_form(int $number, string $one, string $two, string $many): string
 {
-    $number = (int) $number;
+    $number = (int)$number;
     $mod10 = $number % 10;
     $mod100 = $number % 100;
 
@@ -126,7 +73,8 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = []) {
+function include_template($name, array $data = [])
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -144,7 +92,8 @@ function include_template($name, array $data = []) {
 }
 
 // Функция для форматирования цены
-function price_format($number) {
+function price_format($number)
+{
     $number = ceil($number);
 
     if ($number > 1000) {
@@ -152,9 +101,12 @@ function price_format($number) {
     };
 
     return $number . '  &#8381';
-};
+}
 
-function price_format_no_currency($number) {
+;
+
+function price_format_no_currency($number)
+{
     $number = ceil($number);
 
     if ($number > 1000) {
@@ -162,7 +114,9 @@ function price_format_no_currency($number) {
     };
 
     return $number;
-};
+}
+
+;
 
 
 // Функция для обрезки тегов в получаемом от пользователя тексте
@@ -170,78 +124,75 @@ function esc($str)
 {
     $text = strip_tags($str);
     return $text;
-};
+}
+
+;
 
 // Функции для выведения времени до окончания лота
-function calculate_time_lot_ending ($ending_time, $format) {
+function calculate_time_lot_ending($ending_time, $format)
+{
     $seconds_to_ending = $ending_time - time();
     $hours = floor($seconds_to_ending / 3600);
     $minutes = floor(($seconds_to_ending % 3600) / 60);
-    $seconds = $seconds_to_ending - 3600*$hours - $minutes*60;
+    $seconds = $seconds_to_ending - 3600 * $hours - $minutes * 60;
     if ($format === 'minute') {
         return sprintf('%02d:%02d', $hours, $minutes);
-    } else if ($format === 'second') {
-        return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+    } else {
+        if ($format === 'second') {
+            return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+        }
     }
 }
 
-function check_warning_time ($ending_time) {
+function check_warning_time($ending_time)
+{
     $seconds_to_ending = $ending_time - time();
     if ($seconds_to_ending < 3600) {
         return true;
-    }
-    else {
+    } else {
         false;
     }
 }
 
 // Функции для выведения времени, прошедшего с последней ставки
-function calculate_time_last_bets ($last_bets_time) {
+function calculate_time_last_bets($last_bets_time)
+{
     $seconds_to_now = time() - $last_bets_time;
     $days = floor($seconds_to_now / 86400);
     $hours = floor($seconds_to_now / 3600);
     $minutes = floor(($seconds_to_now % 3600) / 60);
-    $seconds = $seconds_to_now - 3600*$hours - $minutes*60;
+    $seconds = $seconds_to_now - 3600 * $hours - $minutes * 60;
 
     if ($days == 1) {
-        return 'Вчера, в ' . date('H:i' ,$last_bets_time);
-    } else if ($days > 1) {
-        return date('d.m.y в H:i' ,$last_bets_time);
-    } else if ($hours == 1) {
-        return 'Час назад';
-    } else if ($hours && $hours < 24) {
-        return $hours . ' ' . get_noun_plural_form($hours, 'час', 'часа', 'часов') . ' назад';
-    } else if ($minutes) {
-        return $minutes . ' ' . get_noun_plural_form($minutes, 'минута', 'минуты', 'минут') . ' назад';
-    } else if ($seconds) {
-        return 'Сейчас';
+        return 'Вчера, в ' . date('H:i', $last_bets_time);
     } else {
-        return date('d.m.y в H:i' ,$last_bets_time);
+        if ($days > 1) {
+            return date('d.m.y в H:i', $last_bets_time);
+        } else {
+            if ($hours == 1) {
+                return 'Час назад';
+            } else {
+                if ($hours && $hours < 24) {
+                    return $hours . ' ' . get_noun_plural_form($hours, 'час', 'часа', 'часов') . ' назад';
+                } else {
+                    if ($minutes) {
+                        return $minutes . ' ' . get_noun_plural_form($minutes, 'минута', 'минуты', 'минут') . ' назад';
+                    } else {
+                        if ($seconds) {
+                            return 'Сейчас';
+                        } else {
+                            return date('d.m.y в H:i', $last_bets_time);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
-
-// Функция для выведения ошибки при запросе к БД
-function show_queries_error ($error) {
-    $content = include_template('error.php', ['error' => $error]);
-    print($content);
-    die;
-}
-
-// Функция для получения массива данных из БД
-function get_data_array ($link, $sql) {
-    $result = mysqli_query($link, $sql);
-
-    if ($result) {
-        return mysqli_fetch_all($result, MYSQLI_ASSOC);
-    }
-    else {
-        show_queries_error(mysqli_error($link));
-        return null;
-    }
-};
 
 // Выведение названия категории в сортировке лотов по категории
-function get_category_name($categories, $id) {
+function get_category_name($categories, $id)
+{
     foreach ($categories as $value) {
         if ($value['id'] === strval($id)) {
             return $category_name = $value['name'];

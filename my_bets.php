@@ -1,11 +1,10 @@
 <?php
-require_once('init.php');
+require_once('database.php');
 
 if (!$link) {
     show_queries_error(mysqli_connect_error());
-}
-else {
-    $bets = get_data_array ($link, 'SELECT * FROM bets as b 
+} else {
+    $bets = get_data_array($link, 'SELECT * FROM bets as b 
 INNER JOIN lots as l ON l.id = b.lot_id
 INNER JOIN  users as u ON u.id = l.user_id 
 INNER JOIN  categories as c ON c.id = l.category_id 
@@ -14,7 +13,7 @@ ORDER BY b.bets_created_at DESC');
 };
 
 $content = include_template('my_bets.php', [
-    'categories' => $categories,
+    'categories' => get_categories($link),
     'bets' => $bets
 ]);
 
@@ -22,9 +21,9 @@ $layout_data = [
     'content' => $content,
     'title' => 'Мои ставки',
     'is_auth' => true,
-    'user_name' =>  $_SESSION['user']['login'],
-    'categories' => $categories,
+    'user_name' => $_SESSION['user']['login'],
+    'categories' => get_categories($link),
     'bets' => $bets,
     'main_classname' => ''
 ];
-create_layout ($layout_data);
+create_layout($layout_data);

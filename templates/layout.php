@@ -33,7 +33,8 @@
                         <a class="user-menu__logout" href="/logout.php">Выход</a>
                     </div>
                     <a class="user-menu_avatar" href="#" style="margin-left: 15px">
-                        <img src="<?= $_SESSION['user']['avatar'] ?>" width="70" height="70" alt="Аватар" style="border-radius: 50%">
+                        <img src="<?= $_SESSION['user']['avatar'] ?>" width="70" height="70" alt="Аватар"
+                             style="border-radius: 50%">
                     </a>
                 <?php else : ?>
                     <ul class="user-menu__list">
@@ -48,32 +49,34 @@
             </nav>
         </div>
     </header>
-    <main <?php echo isset($main_classname) ? 'class="'.$main_classname.'"' : null ?>>
+    <main <?php echo isset($main_classname) ? 'class="' . $main_classname . '"' : null ?>>
         <?php if ($main_classname): ?>
-        <section class="promo">
-            <h2 class="promo__title">Нужен стафф для катки?</h2>
-            <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное
-                снаряжение.</p>
-            <ul class="promo__list">
-                <?php foreach ($categories as $index => $item) : ?>
-                    <li class="promo__item <?= 'promo__item--' . $item['symbol_code'] ?>">
-                        <a class="promo__link" href="all_lots.php?tab=<?= $item['id'] ?>"><?php echo esc($item['name']) ?></a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </section>
+            <section class="promo">
+                <h2 class="promo__title">Нужен стафф для катки?</h2>
+                <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и
+                    горнолыжное
+                    снаряжение.</p>
+                <ul class="promo__list">
+                    <?php foreach ($categories as $index => $item) : ?>
+                        <li class="promo__item <?= 'promo__item--' . $item['symbol_code'] ?>">
+                            <a class="promo__link"
+                               href="all_lots.php?tab=<?= $item['id'] ?>"><?php echo esc($item['name']) ?></a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </section>
         <?php else: ?>
-        <nav class="nav">
-            <ul class="nav__list container">
-                <?php foreach ($categories as $index => $item) : ?>
-                    <li class="nav__item">
-                        <a href="all_lots.php?tab=<?= $item['id'] ?>"><?php echo $item['name'] ?></a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </nav>
+            <nav class="nav">
+                <ul class="nav__list container">
+                    <?php foreach ($categories as $index => $item) : ?>
+                        <li class="nav__item">
+                            <a href="all_lots.php?tab=<?= $item['id'] ?>"><?php echo $item['name'] ?></a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </nav>
         <?php endif; ?>
-    <?php echo $content ?>
+        <?php echo $content ?>
     </main>
 </div>
 

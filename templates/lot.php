@@ -45,7 +45,7 @@
                         <tr class="history__item">
                             <td class="history__name"><?= $item['login'] ?></td>
                             <td class="history__price"><?= $item['price'] ?></td>
-                            <td class="history__time"><?= calculate_time_last_bets(strtotime($item['bets_created_at']))?></td>
+                            <td class="history__time"><?= calculate_time_last_bets(strtotime($item['bets_created_at'])) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </table>

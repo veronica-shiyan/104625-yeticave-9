@@ -1,8 +1,8 @@
 <?php
-require_once('init.php');
+require_once('database.php');
 
 $content = include_template('login.php', [
-    'categories' => $categories
+    'categories' => get_categories($link)
 ]);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (count($errors)) {
         $content = include_template('login.php', [
-            'categories' => $categories,
+            'categories' => get_categories($link),
             'form' => $form,
             'errors' => $errors
         ]);
@@ -52,7 +52,7 @@ $layout_data = [
     'title' => 'Вход',
     'is_auth' => false,
     'user_name' => '',
-    'categories' => $categories,
+    'categories' => get_categories($link),
     'main_classname' => null
 ];
-create_layout ($layout_data);
+create_layout($layout_data);

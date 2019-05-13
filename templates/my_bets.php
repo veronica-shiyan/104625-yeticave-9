@@ -13,7 +13,8 @@
                         <img src="<?= $item['image'] ?>" width="54" height="40" alt="<?= $item['title'] ?>">
                     </div>
                     <div>
-                        <h3 class="rates__title"><a href="lot.php?tab=<?= $item['lot_id'] ?>"><?= $item['title'] ?></a></h3>
+                        <h3 class="rates__title"><a href="lot.php?tab=<?= $item['lot_id'] ?>"><?= $item['title'] ?></a>
+                        </h3>
                         <?php if ($item['winner_id'] == $_SESSION['user']['id']) : ?>
                             <p><?= $item['contact'] ?></p>
                         <?php endif; ?>

@@ -1,5 +1,5 @@
 <?php
-require_once('init.php');
+require_once('database.php');
 
 if (!$link) {
     show_queries_error(mysqli_connect_error());
@@ -10,7 +10,7 @@ INNER JOIN lots ON lots.category_id = categories.id');
 
 if (isset($_SESSION['user'])) {
     $content = include_template('add.php', [
-        'categories' => $categories,
+        'categories' => get_categories($link),
         'lots' => $lots
     ]);
 
@@ -60,14 +60,23 @@ if (isset($_SESSION['user'])) {
 
         if (count($errors)) {
             $content = include_template('add.php', [
-                'categories' => $categories,
+                'categories' => get_categories($link),
                 'lots' => $lots,
                 'errors' => $errors
             ]);
         } else {
             $sql = 'INSERT INTO lots (title, description, starting_price, completed_at, bet_step, category_id, image, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 
-            $data = [$lot['title'], $lot['description'], $lot['starting_price'], $lot['completed_at'], $lot['bet_step'], $lot['category_id'], $lot['image'], $_SESSION['user']['id']];
+            $data = [
+                $lot['title'],
+                $lot['description'],
+                $lot['starting_price'],
+                $lot['completed_at'],
+                $lot['bet_step'],
+                $lot['category_id'],
+                $lot['image'],
+                $_SESSION['user']['id']
+            ];
 
             $stmt = db_get_prepare_stmt($link, $sql, $data);
             $res = mysqli_stmt_execute($stmt);
@@ -85,7 +94,7 @@ if (isset($_SESSION['user'])) {
         'title' => 'Добавление лота',
         'is_auth' => true,
         'user_name' => $_SESSION['user']['login'],
-        'categories' => $categories,
+        'categories' => get_categories($link),
         'lots' => $lots,
         'main_classname' => null
     ];
@@ -98,7 +107,7 @@ if (isset($_SESSION['user'])) {
         'title' => 'Добавление лота',
         'is_auth' => false,
         'user_name' => '',
-        'categories' => $categories,
+        'categories' => get_categories($link),
         'main_classname' => null
     ];
     create_layout($layout_data);

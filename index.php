@@ -1,29 +1,24 @@
 <?php
-require_once('init.php');
+require_once('database.php');
 require_once('winners.php');
 
-if (!$link) {
-    show_queries_error(mysqli_connect_error());
-}
-else {
-    $lots = get_data_array ($link, 'SELECT * FROM categories 
+$sql = 'SELECT * FROM categories 
 INNER JOIN lots ON lots.category_id = categories.id 
 WHERE unix_timestamp(completed_at) > ' . $this_time . '
-ORDER BY created_at DESC LIMIT 6');
-};
+ORDER BY created_at DESC LIMIT 6';
 
 $content = include_template('index.php', [
-    'categories' => $categories,
-    'lots' => $lots
+    'categories' => get_categories($link),
+    'lots' => get_data($link, $sql)
 ]);
 
 $layout_data = [
     'content' => $content,
     'title' => 'Главная',
     'is_auth' => isset($_SESSION['user']) ? true : false,
-    'user_name' =>  isset($_SESSION['user']) ? $_SESSION['user']['login'] : '',
-    'categories' => $categories,
-    'lots' => $lots,
+    'user_name' => isset($_SESSION['user']) ? $_SESSION['user']['login'] : '',
+    'categories' => get_categories($link),
+    'lots' => get_data($link, $sql),
     'main_classname' => 'container'
 ];
-create_layout ($layout_data);
+create_layout($layout_data);
