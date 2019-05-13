@@ -173,11 +173,16 @@ function esc($str)
 };
 
 // Функции для выведения времени до окончания лота
-function calculate_time_lot_ending ($ending_time) {
+function calculate_time_lot_ending ($ending_time, $format) {
     $seconds_to_ending = $ending_time - time();
     $hours = floor($seconds_to_ending / 3600);
     $minutes = floor(($seconds_to_ending % 3600) / 60);
-    return sprintf('%02d:%02d', $hours, $minutes);
+    $seconds = $seconds_to_ending - 3600*$hours - $minutes*60;
+    if ($format === 'minute') {
+        return sprintf('%02d:%02d', $hours, $minutes);
+    } else if ($format === 'second') {
+        return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+    }
 }
 
 function check_warning_time ($ending_time) {
@@ -187,6 +192,31 @@ function check_warning_time ($ending_time) {
     }
     else {
         false;
+    }
+}
+
+// Функции для выведения времени, прошедшего с последней ставки
+function calculate_time_last_bets ($last_bets_time) {
+    $seconds_to_now = time() - $last_bets_time;
+    $days = floor($seconds_to_now / 86400);
+    $hours = floor($seconds_to_now / 3600);
+    $minutes = floor(($seconds_to_now % 3600) / 60);
+    $seconds = $seconds_to_now - 3600*$hours - $minutes*60;
+
+    if ($days == 1) {
+        return 'Вчера, в ' . date('H:i' ,$last_bets_time);
+    } else if ($days > 1) {
+        return date('d.m.y в H:i' ,$last_bets_time);
+    } else if ($hours == 1) {
+        return 'Час назад';
+    } else if ($hours && $hours < 24) {
+        return $hours . ' ' . get_noun_plural_form($hours, 'час', 'часа', 'часов') . ' назад';
+    } else if ($minutes) {
+        return $minutes . ' ' . get_noun_plural_form($minutes, 'минута', 'минуты', 'минут') . ' назад';
+    } else if ($seconds) {
+        return 'Сейчас';
+    } else {
+        return date('d.m.y в H:i' ,$last_bets_time);
     }
 }
 
@@ -209,3 +239,12 @@ function get_data_array ($link, $sql) {
         return null;
     }
 };
+
+// Выведение названия категории в сортировке лотов по категории
+function get_category_name($categories, $id) {
+    foreach ($categories as $value) {
+        if ($value['id'] === strval($id)) {
+            return $category_name = $value['name'];
+        }
+    }
+}

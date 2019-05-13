@@ -1,5 +1,6 @@
 <?php
 require_once('init.php');
+require_once('winners.php');
 
 if (!$link) {
     show_queries_error(mysqli_connect_error());
@@ -7,6 +8,7 @@ if (!$link) {
 else {
     $lots = get_data_array ($link, 'SELECT * FROM categories 
 INNER JOIN lots ON lots.category_id = categories.id 
+WHERE unix_timestamp(completed_at) > ' . $this_time . '
 ORDER BY created_at DESC LIMIT 6');
 };
 
