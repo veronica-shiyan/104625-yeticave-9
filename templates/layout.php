@@ -18,7 +18,7 @@
             <a class="main-header__logo" href="index.php">
                 <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
             </a>
-            <form class="main-header__search" method="get" action="search.php" autocomplete="off">
+            <form class="main-header__search" method="get" action="search.php" autocomplete="off" style="width: auto; flex-grow: 1">
                 <?php $value = isset($_GET['search']) ? $_GET['search'] : "" ?>
                 <input type="search" name="search" placeholder="Поиск лота" value="<?= $value; ?>">
                 <input class="main-header__search-btn" type="submit" name="find" value="Найти">

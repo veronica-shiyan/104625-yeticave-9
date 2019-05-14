@@ -1,6 +1,6 @@
 <?php
 require_once('database.php');
-require_once('winners.php');
+require_once('getwinner.php');
 
 $sql = 'SELECT * FROM categories 
 INNER JOIN lots ON lots.category_id = categories.id 
