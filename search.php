@@ -1,5 +1,9 @@
 <?php
 require_once('database.php');
+session_start();
+
+$link = db_connect($db_data);
+$categories = get_categories($link);
 $this_time = time();
 
 if (!$link) {
@@ -29,25 +33,41 @@ ORDER BY created_at DESC LIMIT ' . $page_items . ' OFFSET ' . $offset;
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+        $content = include_template('search.php', [
+            'categories' => $categories,
+            'lots' => $lots,
+            'search' => $search,
+            'pages_count' => $pages_count,
+            'pages' => $pages,
+            'current_page' => $current_page
+        ]);
+
+        $layout_content = include_template('layout.php', [
+            'content' => $content,
+            'title' => 'Результаты поиска',
+            'is_auth' => isset($_SESSION['user']) ? true : false,
+            'user_name' => isset($_SESSION['user']) ? $_SESSION['user']['login'] : '',
+            'categories' => $categories,
+            'lots' => $lots,
+            'main_classname' => '',
+            'search' => $search
+        ]);
+    } else {
+        $content = include_template('search.php', [
+            'categories' => $categories,
+            'search' => $search,
+        ]);
+
+        $layout_content = include_template('layout.php', [
+            'content' => $content,
+            'title' => 'Результаты поиска',
+            'is_auth' => isset($_SESSION['user']) ? true : false,
+            'user_name' => isset($_SESSION['user']) ? $_SESSION['user']['login'] : '',
+            'categories' => $categories,
+            'main_classname' => '',
+            'search' => $search
+        ]);
     }
 }
-$content = include_template('search.php', [
-    'categories' => get_categories($link),
-    'lots' => $lots,
-    'search' => $search,
-    'pages_count' => $pages_count,
-    'pages' => $pages,
-    'current_page' => $current_page
-]);
-
-$layout_data = [
-    'content' => $content,
-    'title' => 'Результаты поиска',
-    'is_auth' => isset($_SESSION['user']) ? true : false,
-    'user_name' => isset($_SESSION['user']) ? $_SESSION['user']['login'] : '',
-    'categories' => get_categories($link),
-    'lots' => $lots,
-    'main_classname' => '',
-    'search' => $search
-];
-create_layout($layout_data);
+print($layout_content);

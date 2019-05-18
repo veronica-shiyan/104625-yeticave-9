@@ -1,22 +1,17 @@
 <?php
 require_once('database.php');
 
+$link = db_connect($db_data);
+$categories = get_categories($link);
+
 $content = include_template('sign_up.php', [
-    'categories' => get_categories($link)
+    'categories' => $categories
 ]);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
-
     $required = ['email', 'password', 'login', 'contact'];
     $errors = [];
-
-// Проверка заполнения обязательных полей
-    foreach ($required as $key) {
-        if (empty($_POST[$key])) {
-            $errors[$key] = 'Это поле надо заполнить';
-        }
-    }
 
     foreach ($_POST as $key => $value) {
         if ($key == 'email') {
@@ -25,6 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
     }
+
+// Проверка заполнения обязательных полей
+    $errors = validation_required_fields ($required, $errors);
 
     // Проверка загрузки файла
     if (isset($_FILES['avatar']['name']) && $_FILES['avatar']['name'] !== "") {
@@ -40,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $form['avatar'] = 'uploads/' . $path;
         }
     } else {
-        $form['avatar'] = null;
+        $form['avatar'] = 'img/user.png';
     }
 
 // Проверка существования пользователя с email из формы
@@ -56,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (count($errors)) {
         $content = include_template('sign_up.php', [
-            'categories' => get_categories($link),
+            'categories' => $categories,
             'errors' => $errors
         ]);
     } else {
@@ -65,7 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = db_get_prepare_stmt($link, $sql, $data);
         $res = mysqli_stmt_execute($stmt);
 
-
         if ($res) {
             header("Location: login.php");
             exit();
@@ -73,12 +70,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$layout_data = [
+$layout_content = include_template('layout.php', [
     'content' => $content,
     'title' => 'Регистрация',
     'is_auth' => false,
     'user_name' => '',
-    'categories' => get_categories($link),
-    'main_classname' => null
-];
-create_layout($layout_data);
+    'categories' => $categories,
+    'main_classname' => ''
+]);
+print($layout_content);

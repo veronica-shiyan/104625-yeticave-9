@@ -3,11 +3,10 @@
     <h2>Добавление лота</h2>
     <div class="form__container-two">
         <div class="form__item <?= isset($errors['title']) ? "form__item--invalid" : ""; ?>">
-            <!-- form__item--invalid -->
             <label for="lot-name">Наименование <sup>*</sup></label>
             <?php $value = isset($_POST['title']) ? $_POST['title'] : "" ?>
             <input id="lot-name" type="text" name="title" placeholder="Введите наименование лота"
-                   value="<?= $value; ?>">
+                   value="<?= esc($value); ?>">
             <span class="form__error"><?= $errors['title']; ?></span>
         </div>
         <div class="form__item <?= isset($errors['category_id']) ? "form__item--invalid" : ""; ?>">
@@ -40,20 +39,20 @@
         <div class="form__item form__item--small <?= isset($errors['starting_price']) ? "form__item--invalid" : ""; ?>">
             <label for="lot-rate">Начальная цена <sup>*</sup></label>
             <?php $value = isset($_POST['starting_price']) ? $_POST['starting_price'] : "" ?>
-            <input id="lot-rate" type="text" name="starting_price" placeholder="0" value="<?= $value; ?>">
+            <input id="lot-rate" type="text" name="starting_price" placeholder="0" value="<?= esc($value); ?>">
             <span class="form__error"><?= $errors['starting_price']; ?></span>
         </div>
         <div class="form__item form__item--small <?= isset($errors['bet_step']) ? "form__item--invalid" : ""; ?>">
             <label for="lot-step">Шаг ставки <sup>*</sup></label>
             <?php $value = isset($_POST['bet_step']) ? $_POST['bet_step'] : "" ?>
-            <input id="lot-step" type="text" name="bet_step" placeholder="0" value="<?= $value; ?>">
+            <input id="lot-step" type="text" name="bet_step" placeholder="0" value="<?= esc($value); ?>">
             <span class="form__error"><?= $errors['bet_step']; ?></span>
         </div>
         <div class="form__item <?= isset($errors['completed_at']) ? "form__item--invalid" : ""; ?>">
             <label for="lot-date">Дата окончания торгов <sup>*</sup></label>
             <?php $value = isset($_POST['completed_at']) ? $_POST['completed_at'] : "" ?>
             <input class="form__input-date" id="lot-date" type="text" name="completed_at"
-                   placeholder="Введите дату в формате ГГГГ-ММ-ДД" value="<?= $value; ?>">
+                   placeholder="Введите дату в формате ГГГГ-ММ-ДД" value="<?= esc($value); ?>">
             <span class="form__error"><?= $errors['completed_at']; ?></span>
         </div>
     </div>

@@ -1,22 +1,16 @@
 <?php
 require_once('database.php');
-
-if (!$link) {
-    show_queries_error(mysqli_connect_error());
-} else {
-    $lots = get_data_array($link, 'SELECT * FROM categories 
-INNER JOIN lots ON lots.category_id = categories.id');
-};
+session_start();
+$link = db_connect($db_data);
+$categories = get_categories($link);
 
 if (isset($_SESSION['user'])) {
     $content = include_template('add.php', [
-        'categories' => get_categories($link),
-        'lots' => $lots
+        'categories' => $categories
     ]);
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $lot = $_POST;
-
         $required = ['title', 'category_id', 'description', 'starting_price', 'bet_step', 'completed_at'];
         $errors = [];
 
@@ -29,17 +23,17 @@ if (isset($_SESSION['user'])) {
         if (!is_numeric($_POST['bet_step']) || $_POST['bet_step'] % 1 !== 0) {
             $errors['bet_step'] = 'Содержимое поля должно быть целым числом больше ноля';
         }
+
+        // Проверка полей шаг ставки и начальная цена на величину
+        $errors = validation_numeric_fields (['bet_step', 'starting_price'], $errors);
+
 // Проверка формата даты окончания лота
         if (!is_date_valid($_POST['completed_at'])) {
             $errors['completed_at'] = 'Введите дату в верном формате';
         }
 
 // Проверка заполнения обязательных полей
-        foreach ($required as $key) {
-            if (empty($_POST[$key])) {
-                $errors[$key] = 'Это поле надо заполнить';
-            }
-        }
+        $errors = validation_required_fields ($required, $errors);
 
 // Проверка загрузки файла
         if (isset($_FILES['image']['name']) && $_FILES['image']['name'] !== "") {
@@ -60,8 +54,7 @@ if (isset($_SESSION['user'])) {
 
         if (count($errors)) {
             $content = include_template('add.php', [
-                'categories' => get_categories($link),
-                'lots' => $lots,
+                'categories' => $categories,
                 'errors' => $errors
             ]);
         } else {
@@ -88,27 +81,26 @@ if (isset($_SESSION['user'])) {
             }
         }
     }
-
-    $layout_data = [
+    $layout_content = include_template('layout.php', [
         'content' => $content,
         'title' => 'Добавление лота',
         'is_auth' => true,
         'user_name' => $_SESSION['user']['login'],
-        'categories' => get_categories($link),
-        'lots' => $lots,
+        'categories' => $categories,
         'main_classname' => null
-    ];
-    create_layout($layout_data);
+    ]);
+    print($layout_content);
+
 } else {
     header('HTTP/1.0 403 Forbidden');
     $content = include_template('403.php', []);
-    $layout_data = [
+    $layout_content = include_template('layout.php', [
         'content' => $content,
         'title' => 'Добавление лота',
         'is_auth' => false,
         'user_name' => '',
-        'categories' => get_categories($link),
+        'categories' => $categories,
         'main_classname' => null
-    ];
-    create_layout($layout_data);
+    ]);
+    print($layout_content);
 }

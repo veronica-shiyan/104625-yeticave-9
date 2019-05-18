@@ -2,6 +2,7 @@
     <section class="lots">
         <h2>Все лоты в категории <span>«<?= get_category_name($categories, $id) ?>»</span></h2>
         <ul class="lots__list">
+            <?php if ($lots) :?>
             <?php foreach ($lots as $value) : ?>
                 <li class="lots__item lot">
                     <div class="lot__image">
@@ -14,15 +15,17 @@
                         <div class="lot__state">
                             <div class="lot__rate">
                                 <span class="lot__amount">Стартовая цена</span>
-                                <span class="lot__cost"><?= price_format($value['starting_price']) ?></span>
+                                <span class="lot__cost"><?= price_format($value['starting_price'], '&#8381') ?></span>
                             </div>
-                            <div class="lot__timer timer <?= check_warning_time(strtotime($value['completed_at'])) ? 'timer--finishing' : '' ?>">
-                                <?= calculate_time_lot_ending(strtotime($value['completed_at']), 'second'); ?>
+                            <div class="lot__timer timer <?= check_warning_time($value['completed_at']) ? 'timer--finishing' : '' ?>">
+                                <?= calculate_time_lot_ending($value['completed_at'], 'second'); ?>
                             </div>
                         </div>
                     </div>
                 </li>
             <?php endforeach; ?>
+            <?php else:?><?= 'В данной категории лотов не существует' ?>
+            <?php endif; ?>
         </ul>
     </section>
     <?php if ($pages_count > 1): ?>

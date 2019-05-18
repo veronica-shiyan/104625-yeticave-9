@@ -91,8 +91,13 @@ function include_template($name, array $data = [])
     return $result;
 }
 
-// Функция для форматирования цены
-function price_format($number)
+/**
+ * Форматирует стартовую цену лота (округляет, отделяет разряды, добавляет валюту)
+ * @param string $number Стартовая цена лота
+ * @param string $currency HTML-спецсимвол знака валюты
+ * @return string Отформатированная цена
+ */
+function price_format($number, $currency)
 {
     $number = ceil($number);
 
@@ -100,63 +105,62 @@ function price_format($number)
         $number = number_format($number, 0, '', ' ');
     };
 
-    return $number . '  &#8381';
+    return $number . ' ' . $currency;
 }
 
-;
-
-function price_format_no_currency($number)
-{
-    $number = ceil($number);
-
-    if ($number > 1000) {
-        $number = number_format($number, 0, '', ' ');
-    };
-
-    return $number;
-}
-
-;
-
-
-// Функция для обрезки тегов в получаемом от пользователя тексте
+/**
+ * Обрезает теги в получаемом от пользователя тексте
+ * @param string $str Данные полученые от пользователя
+ * @return string Отформатированые пользовательские данные
+ */
 function esc($str)
 {
     $text = strip_tags($str);
     return $text;
 }
 
-;
-
-// Функции для выведения времени до окончания лота
+/**
+ * Вычисляет время до окончания лота и выводит его в заданом формате
+ * @param string $ending_time Дата и время окончания лота (в формате ГГГГ-ММ-ДД ЧЧ:ММ:СС)
+ * @param string $format Принимает два заначения - 'minute' (возвращает оставшееся время с точностью до минут - ЧЧ:ММ) и 'second' (возвращает оставшееся время с точностью до секунд - ЧЧ:ММ:СС)
+ * @return string Время до окончания лота в заданом формате
+ */
 function calculate_time_lot_ending($ending_time, $format)
 {
+    $ending_time = strtotime($ending_time);
     $seconds_to_ending = $ending_time - time();
     $hours = floor($seconds_to_ending / 3600);
     $minutes = floor(($seconds_to_ending % 3600) / 60);
     $seconds = $seconds_to_ending - 3600 * $hours - $minutes * 60;
     if ($format === 'minute') {
-        return sprintf('%02d:%02d', $hours, $minutes);
-    } else {
-        if ($format === 'second') {
-            return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-        }
+        $ending_time = sprintf('%02d:%02d', $hours, $minutes);
+    } elseif ($format === 'second') {
+        $ending_time = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
     }
+    return $ending_time;
 }
 
+
+/**
+ * Проверяет сколько времени осталось до окончания лота - больше или меньше часа
+ * @param string $ending_time Дата и время окончания лота (в формате ГГГГ-ММ-ДД ЧЧ:ММ:СС)
+ * @return bool true - если осталось меньше часа, иначе - false
+ */
 function check_warning_time($ending_time)
 {
+    $ending_time = strtotime($ending_time);
     $seconds_to_ending = $ending_time - time();
-    if ($seconds_to_ending < 3600) {
-        return true;
-    } else {
-        false;
-    }
+    return ($seconds_to_ending < 3600) ? true : false;
 }
 
-// Функции для выведения времени, прошедшего с последней ставки
+/**
+ * Вычисляет время прошедшее с момента совершения ставки и выводит его в нужном формате
+ * @param string $last_bets_time Дата совершения ставки (в формате ГГГГ-ММ-ДД ЧЧ:ММ:СС)
+ * @return string Время прошедшее с момента совершения ставки в нужном формате
+ */
 function calculate_time_last_bets($last_bets_time)
 {
+    $last_bets_time = strtotime($last_bets_time);
     $seconds_to_now = time() - $last_bets_time;
     $days = floor($seconds_to_now / 86400);
     $hours = floor($seconds_to_now / 3600);
@@ -165,37 +169,65 @@ function calculate_time_last_bets($last_bets_time)
 
     if ($days == 1) {
         return 'Вчера, в ' . date('H:i', $last_bets_time);
+    } elseif ($days > 1) {
+        return date('d.m.y в H:i', $last_bets_time);
+    } elseif ($hours == 1) {
+        return 'Час назад';
+    } elseif ($hours && $hours < 24) {
+        return $hours . ' ' . get_noun_plural_form($hours, 'час', 'часа', 'часов') . ' назад';
+    } elseif ($minutes) {
+        return $minutes . ' ' . get_noun_plural_form($minutes, 'минута', 'минуты', 'минут') . ' назад';
+    } elseif ($seconds) {
+        return 'Сейчас';
     } else {
-        if ($days > 1) {
-            return date('d.m.y в H:i', $last_bets_time);
-        } else {
-            if ($hours == 1) {
-                return 'Час назад';
-            } else {
-                if ($hours && $hours < 24) {
-                    return $hours . ' ' . get_noun_plural_form($hours, 'час', 'часа', 'часов') . ' назад';
-                } else {
-                    if ($minutes) {
-                        return $minutes . ' ' . get_noun_plural_form($minutes, 'минута', 'минуты', 'минут') . ' назад';
-                    } else {
-                        if ($seconds) {
-                            return 'Сейчас';
-                        } else {
-                            return date('d.m.y в H:i', $last_bets_time);
-                        }
-                    }
-                }
-            }
-        }
+        return date('d.m.y в H:i', $last_bets_time);
     }
 }
 
-// Выведение названия категории в сортировке лотов по категории
+/**
+ * Получает имя категории по id, полученому из ассоциативного массива $_GET
+ * @param array $categories Массив данных, содержащий имя категории и ее id
+ * @param int $id Значение id, полученное из ассоциативного массива $_GET
+ * @return string Имя категории соответствующее id, полученому из ассоциативного массива $_GET
+ */
 function get_category_name($categories, $id)
 {
     foreach ($categories as $value) {
         if ($value['id'] === strval($id)) {
-            return $category_name = $value['name'];
+            $category_name = $value['name'];
         }
     }
+    return $category_name;
+}
+
+/**
+ * Проверяет заполнение обязательных полей форм
+ * @param array $required Массив, содержащий атрибуты name обязатеных полей
+ * @param array $errors Массив для записи ошибки, возникающей при получении пустого поля
+ * @return array Список ошибок, полученных при валидации
+ */
+function validation_required_fields($required, $errors)
+{
+    foreach ($required as $key) {
+        if (empty($_POST[$key])) {
+            $errors[$key] = 'Это поле надо заполнить';
+        }
+    }
+    return $errors;
+}
+
+/**
+ * Проверяет значения числовых полей формы на то, что их значения больше нуля
+ * @param array $field Массив, содержащий атрибуты name полей
+ * @param array $errors Массив для записи ошибки, возникающей при получении числа меньше или равного нулю
+ * @return array Список ошибок, полученных при валидации
+ */
+function validation_numeric_fields($field, $errors)
+{
+    foreach ($field as $key) {
+        if ($_POST[$key] <= 0) {
+            $errors[$key] = 'Содержимое поля должно быть целым числом больше ноля';
+        }
+    }
+    return $errors;
 }

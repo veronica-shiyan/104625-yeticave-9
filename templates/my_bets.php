@@ -29,7 +29,7 @@
                         <?= 'timer--win' ?>
                     <?php elseif ((strtotime($item['completed_at']) < time())) : ?>
                         <?= 'timer--end' ?>
-                    <?php elseif (check_warning_time(strtotime($item['completed_at']))) : ?>
+                    <?php elseif (check_warning_time($item['completed_at'])) : ?>
                         <?= 'timer--finishing' ?>
                     <?php endif; ?>">
                         <?php if ($item['winner_id'] == $_SESSION['user']['id']) : ?>
@@ -37,15 +37,15 @@
                         <?php elseif ((strtotime($item['completed_at']) < time())) : ?>
                             <?= 'Торги окончены' ?>
                         <?php else: ?>
-                            <?= calculate_time_lot_ending(strtotime($item['completed_at']), 'second'); ?>
+                            <?= calculate_time_lot_ending($item['completed_at'], 'second'); ?>
                         <?php endif; ?>
                     </div>
                 </td>
                 <td class="rates__price">
-                    <?= $item['price'] ?>
+                    <?= price_format($item['price'], null) ?>
                 </td>
                 <td class="rates__time">
-                    <?= calculate_time_last_bets(strtotime($item['bets_created_at'])) ?>
+                    <?= calculate_time_last_bets($item['bets_created_at']) ?>
                 </td>
             </tr>
         <?php endforeach; ?>
