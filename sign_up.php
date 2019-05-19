@@ -16,9 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //Проверка, что значение является корректным e-mail
     $errors = validation_email($errors);
     // Проверка заполнения обязательных полей
-    $errors = validation_required_fields ($required, $errors);
+    $errors = validation_required_fields($required, $errors);
     // Проверка загрузки файла
-    $errors = validation_file_type ('avatar', $errors);
+    $errors = validation_file_type('avatar', $errors);
     if (isset($errors['file']) && $errors['file'] === 'Вы не загрузили файл') {
         unset($errors['file']);
         $form['avatar'] = 'img/user.png';
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     // Проверка существования пользователя с email из формы
     $email = mysqli_real_escape_string($link, $form['email']);
-    $res = validation_is_email ($link, $email, 'id');
+    $res = validation_is_email($link, $email, 'id');
     if (mysqli_num_rows($res) > 0) {
         $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
     } else {

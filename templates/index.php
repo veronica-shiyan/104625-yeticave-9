@@ -16,7 +16,8 @@
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?php echo price_format(esc($value['starting_price']), '&#8381') ?></span>
+                            <span class="lot__cost"><?php echo price_format(esc($value['starting_price']),
+                                    '&#8381') ?></span>
                         </div>
                         <div class="lot__timer timer <?= check_warning_time($value['completed_at']) ? 'timer--finishing' : '' ?>">
                             <?= calculate_time_lot_ending($value['completed_at'], 'minute'); ?>

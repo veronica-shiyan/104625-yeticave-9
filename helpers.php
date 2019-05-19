@@ -282,7 +282,8 @@ function validation_file_type($field, $errors)
  *
  * @return array Список ошибок, полученных при валидации
  */
-function validation_duration ($field, $errors) {
+function validation_duration($field, $errors)
+{
     if ((strtotime($_POST[$field]) - time()) <= 86400) {
         $errors['completed_at'] = 'Продлите срок действия лота';
     }
@@ -297,7 +298,7 @@ function validation_duration ($field, $errors) {
  *
  * @return array Список ошибок, полученных при валидации
  */
-function validation_integer ($field, $errors)
+function validation_integer($field, $errors)
 {
     foreach ($field as $key) {
         if (!is_numeric($_POST[$key]) || $_POST[$key] % 1 !== 0) {
@@ -316,7 +317,8 @@ function validation_integer ($field, $errors)
  *
  * @return array Список ошибок, полученных при валидации
  */
-function validation_bet_value ($field, $errors, $bet_price) {
+function validation_bet_value($field, $errors, $bet_price)
+{
     if ($_POST[$field] < $bet_price) {
         $errors['price'] = 'Увеличьте Вашу ставку';
     }
@@ -331,7 +333,8 @@ function validation_bet_value ($field, $errors, $bet_price) {
  *
  * @return array Список ошибок, полученных при валидации
  */
-function validation_date_format ($field, $errors) {
+function validation_date_format($field, $errors)
+{
     if (!is_date_valid($_POST[$field])) {
         $errors[$field] = 'Введите дату в верном формате';
     }
@@ -345,7 +348,8 @@ function validation_date_format ($field, $errors) {
  *
  * @return array Список ошибок, полученных при валидации
  */
-function validation_email ($errors) {
+function validation_email($errors)
+{
     foreach ($_POST as $key => $value) {
         if ($key == 'email') {
             if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {

@@ -19,13 +19,13 @@ if (isset($_SESSION['user'])) {
         // Проверка поля шаг ставки и начальная цена на целочисленность
         $errors = validation_integer(['bet_step', 'starting_price'], $errors);
         // Проверка полей шаг ставки и начальная цена на величину
-        $errors = validation_numeric_fields (['bet_step', 'starting_price'], $errors);
+        $errors = validation_numeric_fields(['bet_step', 'starting_price'], $errors);
         // Проверка формата даты окончания лота
-        $errors = validation_date_format ('completed_at', $errors);
+        $errors = validation_date_format('completed_at', $errors);
         // Проверка заполнения обязательных полей
-        $errors = validation_required_fields ($required, $errors);
+        $errors = validation_required_fields($required, $errors);
         // Проверка загрузки файла
-        $errors = validation_file_type ('image', $errors);
+        $errors = validation_file_type('image', $errors);
         if (!isset($errors['file'])) {
             $tmp_name = $_FILES['image']['tmp_name'];
             $path = $_FILES['image']['name'];

@@ -7,7 +7,7 @@ $this_time = time();
 $winners = get_winners($link, $this_time);
 
 if (isset($winners)) {
-    $res = update_winner_id ($link, $winners);
+    $res = update_winner_id($link, $winners);
 
     $transport = new Swift_SmtpTransport('phpdemo.ru', 25);
     $transport->setUsername('keks@phpdemo.ru');

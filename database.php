@@ -294,7 +294,8 @@ function db_get_prepare_stmt($link, $sql, $data = [])
  *
  * @return bool true - в случае удачного выполнения запроса, иначе false
  */
-function add_lot ($link, $data) {
+function add_lot($link, $data)
+{
     $sql = 'INSERT INTO lots (title, description, starting_price, completed_at, bet_step, category_id, image, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     return $res = mysqli_stmt_execute($stmt);
@@ -309,7 +310,8 @@ function add_lot ($link, $data) {
  *
  * @return object Объект результата запроса
  */
-function validation_is_email ($link, $email, $column) {
+function validation_is_email($link, $email, $column)
+{
     $sql = "SELECT $column FROM users WHERE email = '$email'";
     return $res = mysqli_query($link, $sql);
 }
@@ -322,7 +324,8 @@ function validation_is_email ($link, $email, $column) {
  *
  * @return bool true - в случае удачного выполнения запроса, иначе false
  */
-function add_user ($link, $data) {
+function add_user($link, $data)
+{
     $sql = 'INSERT INTO users (email, login, password, contact, avatar) VALUES (?, ?, ?, ?, ?)';
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     return $res = mysqli_stmt_execute($stmt);
@@ -337,7 +340,8 @@ function add_user ($link, $data) {
  *
  * @return int Количество лотов
  */
-function get_search_items ($link, $time, $search) {
+function get_search_items($link, $time, $search)
+{
     $sql = 'SELECT * FROM lots WHERE MATCH(title, description) AGAINST(?) AND unix_timestamp(lots.completed_at) > ' . $time;
     $stmt = db_get_prepare_stmt($link, $sql, [$search]);
     mysqli_stmt_execute($stmt);
@@ -357,7 +361,8 @@ function get_search_items ($link, $time, $search) {
  *
  * @return array Массив данных лотов
  */
-function get_search_lots ($link, $time, $search, $page_items,  $offset) {
+function get_search_lots($link, $time, $search, $page_items, $offset)
+{
     $sql = 'SELECT * FROM categories 
 INNER JOIN lots ON lots.category_id = categories.id 
 WHERE MATCH(title, description) AGAINST(?) AND unix_timestamp(lots.completed_at) > ' . $time . '
@@ -376,7 +381,8 @@ ORDER BY created_at DESC LIMIT ' . $page_items . ' OFFSET ' . $offset;
  *
  * @return bool true - в случае удачного выполнения запроса, иначе false
  */
-function add_bets ($link, $data) {
+function add_bets($link, $data)
+{
     $sql = 'INSERT INTO bets (price, bets_user_id, lot_id) VALUES (?, ?, ?)';
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     return $res = mysqli_stmt_execute($stmt);
@@ -390,15 +396,16 @@ function add_bets ($link, $data) {
  *
  * @return bool true - в случае удачного выполнения запроса, иначе false
  */
-function update_price ($link, $id) {
+function update_price($link, $id)
+{
     if (!$link) {
         return show_queries_error(mysqli_connect_error());
     } else {
         $sql = 'SELECT price FROM bets ORDER BY bets_created_at DESC LIMIT 1';
         $new_price = get_data_array($link, $sql);
     }
-        $sql_update = 'UPDATE lots SET starting_price = ' . $new_price[0]['price'] . ' WHERE id = ' . $id;
-        return $res = mysqli_query($link, $sql_update);
+    $sql_update = 'UPDATE lots SET starting_price = ' . $new_price[0]['price'] . ' WHERE id = ' . $id;
+    return $res = mysqli_query($link, $sql_update);
 }
 
 /**
@@ -409,9 +416,11 @@ function update_price ($link, $id) {
  *
  * @return bool true - в случае удачного выполнения запроса, иначе false
  */
-function update_winner_id ($link, $winners) {
+function update_winner_id($link, $winners)
+{
     foreach ($winners as $item) {
         $sql = 'UPDATE lots SET winner_id = ' . $item['bets_user_id'] . ' WHERE id = ' . $item['id'];
-        return $res = mysqli_query($link, $sql);
+        $res = mysqli_query($link, $sql);
     }
+    return isset($res);
 }

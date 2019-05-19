@@ -13,11 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
     $required = ['email', 'password'];
     $errors = [];
-    $errors = validation_required_fields ($required, $errors);
+    $errors = validation_required_fields($required, $errors);
 
     if (!count($errors)) {
         $email = mysqli_real_escape_string($link, $form['email']);
-        $res = validation_is_email ($link, $email, '*');
+        $res = validation_is_email($link, $email, '*');
         $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
         if (!count($errors) and $user) {

@@ -10,11 +10,11 @@ $search = isset($_GET['search']) ? trim(esc($_GET['search'])) : '';
 if ($search) {
     $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $page_items = 9;
-    $items = get_search_items ($link, $this_time, $search);
+    $items = get_search_items($link, $this_time, $search);
     $pages_count = ceil($items / $page_items);
     $offset = ($current_page - 1) * $page_items;
     $pages = range(1, $pages_count);
-    $lots = get_search_lots ($link, $this_time, $search, $page_items,  $offset);
+    $lots = get_search_lots($link, $this_time, $search, $page_items, $offset);
 
     $content = include_template('search.php', [
         'categories' => $categories,

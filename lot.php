@@ -5,8 +5,8 @@ session_start();
 $link = db_connect($db_data);
 $categories = get_categories($link);
 $id = isset($_GET['tab']) ? (int)$_GET['tab'] : 0;
-$lot = get_lots_on_id ($link, $id);
-$bets = get_bets ($link, $id);
+$lot = get_lots_on_id($link, $id);
+$bets = get_bets($link, $id);
 $bet_price = $lot['starting_price'] + $lot['bet_step'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -17,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($_POST['price'])) {
         $errors['price'] = 'Укажите Вашу ставку';
     } else {
-        $errors = validation_bet_value ('price', $errors, $bet_price);
-        $errors = validation_integer (['price'], $errors);
+        $errors = validation_bet_value('price', $errors, $bet_price);
+        $errors = validation_integer(['price'], $errors);
     }
 
     if (count($errors)) {
@@ -27,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ]);
     } else {
         $data = [$form['price'], $_SESSION['user']['id'], $id];
-        $res = add_bets ($link, $data);
+        $res = add_bets($link, $data);
         if ($res) {
-            $res = update_price ($link, $id);
+            $res = update_price($link, $id);
             header("Location: /my_bets.php");
             exit();
         }
