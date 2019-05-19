@@ -15,41 +15,22 @@ if (isset($_SESSION['user'])) {
         $errors = [];
 
         // Проверка, что указанная дата окончания лота больше текущей даты, хотя бы на один день
-        if ((strtotime($_POST['completed_at']) - time()) <= 86400) {
-            $errors['completed_at'] = 'Продлите срок действия лота';
-        }
-
-        // Проверка поля шаг ставки на целочисленность
-        if (!is_numeric($_POST['bet_step']) || $_POST['bet_step'] % 1 !== 0) {
-            $errors['bet_step'] = 'Содержимое поля должно быть целым числом больше ноля';
-        }
-
+        $errors = validation_duration('completed_at', $errors);
+        // Проверка поля шаг ставки и начальная цена на целочисленность
+        $errors = validation_integer(['bet_step', 'starting_price'], $errors);
         // Проверка полей шаг ставки и начальная цена на величину
         $errors = validation_numeric_fields (['bet_step', 'starting_price'], $errors);
-
-// Проверка формата даты окончания лота
-        if (!is_date_valid($_POST['completed_at'])) {
-            $errors['completed_at'] = 'Введите дату в верном формате';
-        }
-
-// Проверка заполнения обязательных полей
+        // Проверка формата даты окончания лота
+        $errors = validation_date_format ('completed_at', $errors);
+        // Проверка заполнения обязательных полей
         $errors = validation_required_fields ($required, $errors);
-
-// Проверка загрузки файла
-        if (isset($_FILES['image']['name']) && $_FILES['image']['name'] !== "") {
+        // Проверка загрузки файла
+        $errors = validation_file_type ('image', $errors);
+        if (!isset($errors['file'])) {
             $tmp_name = $_FILES['image']['tmp_name'];
             $path = $_FILES['image']['name'];
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $file_type = finfo_file($finfo, $tmp_name);
-            // Проверка типа файла
-            if ($file_type !== "image/jpeg" && $file_type !== "image/png") {
-                $errors['file'] = 'Загрузите картинку в формате jpg, jpeg или png';
-            } else {
-                move_uploaded_file($tmp_name, 'uploads/' . $path);
-                $lot['image'] = 'uploads/' . $path;
-            }
-        } else {
-            $errors['file'] = 'Вы не загрузили файл';
+            move_uploaded_file($tmp_name, 'uploads/' . $path);
+            $lot['image'] = 'uploads/' . $path;
         }
 
         if (count($errors)) {
@@ -58,8 +39,6 @@ if (isset($_SESSION['user'])) {
                 'errors' => $errors
             ]);
         } else {
-            $sql = 'INSERT INTO lots (title, description, starting_price, completed_at, bet_step, category_id, image, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-
             $data = [
                 $lot['title'],
                 $lot['description'],
@@ -70,13 +49,10 @@ if (isset($_SESSION['user'])) {
                 $lot['image'],
                 $_SESSION['user']['id']
             ];
-
-            $stmt = db_get_prepare_stmt($link, $sql, $data);
-            $res = mysqli_stmt_execute($stmt);
+            $res = add_lot($link, $data);
 
             if ($res) {
                 $lot_id = mysqli_insert_id($link);
-
                 header("Location: lot.php?tab=" . $lot_id);
             }
         }

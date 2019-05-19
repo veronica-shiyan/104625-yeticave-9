@@ -13,7 +13,7 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date): bool
+function is_date_valid($date)
 {
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
@@ -43,7 +43,7 @@ function is_date_valid(string $date): bool
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form(int $number, string $one, string $two, string $many): string
+function get_noun_plural_form($number, $one, $two, $many)
 {
     $number = (int)$number;
     $mod10 = $number % 10;
@@ -69,8 +69,10 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
 
 /**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
+ *
  * @param string $name Путь к файлу шаблона относительно папки templates
  * @param array $data Ассоциативный массив с данными для шаблона
+ *
  * @return string Итоговый HTML
  */
 function include_template($name, array $data = [])
@@ -93,8 +95,10 @@ function include_template($name, array $data = [])
 
 /**
  * Форматирует стартовую цену лота (округляет, отделяет разряды, добавляет валюту)
+ *
  * @param string $number Стартовая цена лота
  * @param string $currency HTML-спецсимвол знака валюты
+ *
  * @return string Отформатированная цена
  */
 function price_format($number, $currency)
@@ -110,7 +114,9 @@ function price_format($number, $currency)
 
 /**
  * Обрезает теги в получаемом от пользователя тексте
+ *
  * @param string $str Данные полученые от пользователя
+ *
  * @return string Отформатированые пользовательские данные
  */
 function esc($str)
@@ -121,8 +127,10 @@ function esc($str)
 
 /**
  * Вычисляет время до окончания лота и выводит его в заданом формате
+ *
  * @param string $ending_time Дата и время окончания лота (в формате ГГГГ-ММ-ДД ЧЧ:ММ:СС)
  * @param string $format Принимает два заначения - 'minute' (возвращает оставшееся время с точностью до минут - ЧЧ:ММ) и 'second' (возвращает оставшееся время с точностью до секунд - ЧЧ:ММ:СС)
+ *
  * @return string Время до окончания лота в заданом формате
  */
 function calculate_time_lot_ending($ending_time, $format)
@@ -143,7 +151,9 @@ function calculate_time_lot_ending($ending_time, $format)
 
 /**
  * Проверяет сколько времени осталось до окончания лота - больше или меньше часа
+ *
  * @param string $ending_time Дата и время окончания лота (в формате ГГГГ-ММ-ДД ЧЧ:ММ:СС)
+ *
  * @return bool true - если осталось меньше часа, иначе - false
  */
 function check_warning_time($ending_time)
@@ -155,7 +165,9 @@ function check_warning_time($ending_time)
 
 /**
  * Вычисляет время прошедшее с момента совершения ставки и выводит его в нужном формате
+ *
  * @param string $last_bets_time Дата совершения ставки (в формате ГГГГ-ММ-ДД ЧЧ:ММ:СС)
+ *
  * @return string Время прошедшее с момента совершения ставки в нужном формате
  */
 function calculate_time_last_bets($last_bets_time)
@@ -186,8 +198,10 @@ function calculate_time_last_bets($last_bets_time)
 
 /**
  * Получает имя категории по id, полученому из ассоциативного массива $_GET
+ *
  * @param array $categories Массив данных, содержащий имя категории и ее id
  * @param int $id Значение id, полученное из ассоциативного массива $_GET
+ *
  * @return string Имя категории соответствующее id, полученому из ассоциативного массива $_GET
  */
 function get_category_name($categories, $id)
@@ -202,8 +216,10 @@ function get_category_name($categories, $id)
 
 /**
  * Проверяет заполнение обязательных полей форм
+ *
  * @param array $required Массив, содержащий атрибуты name обязатеных полей
- * @param array $errors Массив для записи ошибки, возникающей при получении пустого поля
+ * @param array $errors Массив для записи ошибки, возникающей при получении пустого валидируемого поля
+ *
  * @return array Список ошибок, полученных при валидации
  */
 function validation_required_fields($required, $errors)
@@ -218,8 +234,10 @@ function validation_required_fields($required, $errors)
 
 /**
  * Проверяет значения числовых полей формы на то, что их значения больше нуля
- * @param array $field Массив, содержащий атрибуты name полей
+ *
+ * @param array $field Массив, содержащий атрибуты name валидируемых полей
  * @param array $errors Массив для записи ошибки, возникающей при получении числа меньше или равного нулю
+ *
  * @return array Список ошибок, полученных при валидации
  */
 function validation_numeric_fields($field, $errors)
@@ -227,6 +245,112 @@ function validation_numeric_fields($field, $errors)
     foreach ($field as $key) {
         if ($_POST[$key] <= 0) {
             $errors[$key] = 'Содержимое поля должно быть целым числом больше ноля';
+        }
+    }
+    return $errors;
+}
+
+/**
+ * Проверяет наличие загрузки файла и его соответствие заданаому типу
+ *
+ * @param string $field Строка, содержащая атрибут name валидируемого поля type = 'file'
+ * @param array $errors Массив для записи ошибки, обнаруженной при проверке
+ *
+ * @return array Список ошибок, полученных при валидации
+ */
+function validation_file_type($field, $errors)
+{
+    if (isset($_FILES[$field]['name']) && $_FILES[$field]['name'] !== "") {
+        $tmp_name = $_FILES[$field]['tmp_name'];
+        $path = $_FILES[$field]['name'];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $file_type = finfo_file($finfo, $tmp_name);
+        if ($file_type !== "image/jpeg" && $file_type !== "image/png") {
+            $errors['file'] = 'Загрузите картинку в формате jpg, jpeg или png';
+        }
+    } else {
+        $errors['file'] = 'Вы не загрузили файл';
+    }
+    return $errors;
+}
+
+/**
+ * Проверяет срок действия лота (должен быть больше суток)
+ *
+ * @param string $field Строка, содержащая атрибут name валидируемого поля
+ * @param array $errors Массив для записи ошибки, обнаруженной при проверке
+ *
+ * @return array Список ошибок, полученных при валидации
+ */
+function validation_duration ($field, $errors) {
+    if ((strtotime($_POST[$field]) - time()) <= 86400) {
+        $errors['completed_at'] = 'Продлите срок действия лота';
+    }
+    return $errors;
+}
+
+/**
+ * Проверяет срок действия лота (должен быть больше суток)
+ *
+ * @param array $field Массив, содержащий атрибуты name валидируемых полей
+ * @param array $errors Массив для записи ошибки, обнаруженной при проверке
+ *
+ * @return array Список ошибок, полученных при валидации
+ */
+function validation_integer ($field, $errors)
+{
+    foreach ($field as $key) {
+        if (!is_numeric($_POST[$key]) || $_POST[$key] % 1 !== 0) {
+            $errors[$key] = 'Содержимое поля должно быть целым числом больше ноля';
+        }
+    }
+    return $errors;
+}
+
+/**
+ * Проверяет величину ставки
+ *
+ * @param string $field Строка, содержащая атрибут name валидируемого поля
+ * @param array $errors Массив для записи ошибки, обнаруженной при проверке
+ * @param int $bet_price Минимальная новая стоимость лота
+ *
+ * @return array Список ошибок, полученных при валидации
+ */
+function validation_bet_value ($field, $errors, $bet_price) {
+    if ($_POST[$field] < $bet_price) {
+        $errors['price'] = 'Увеличьте Вашу ставку';
+    }
+    return $errors;
+}
+
+/**
+ * Проверяет формат даты
+ *
+ * @param string $field Строка, содержащая атрибут name валидируемого поля
+ * @param array $errors Массив для записи ошибки, обнаруженной при проверке
+ *
+ * @return array Список ошибок, полученных при валидации
+ */
+function validation_date_format ($field, $errors) {
+    if (!is_date_valid($_POST[$field])) {
+        $errors[$field] = 'Введите дату в верном формате';
+    }
+    return $errors;
+}
+
+/**
+ * Проверяет, что значение является корректным e-mail
+ *
+ * @param array $errors Массив для записи ошибки, обнаруженной при проверке
+ *
+ * @return array Список ошибок, полученных при валидации
+ */
+function validation_email ($errors) {
+    foreach ($_POST as $key => $value) {
+        if ($key == 'email') {
+            if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                $errors[$key] = 'Некорректное значение email';
+            }
         }
     }
     return $errors;

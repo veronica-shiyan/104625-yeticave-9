@@ -1,12 +1,12 @@
 <section class="lot-item container">
-    <h2><?php echo $lot['title'] ?></h2>
+    <h2><?= $lot['title'] ?></h2>
     <div class="lot-item__content">
         <div class="lot-item__left">
             <div class="lot-item__image">
-                <img src="<?php echo $lot['image'] ?>" width="730" height="548" alt="Сноуборд">
+                <img src="<?= $lot['image'] ?>" width="730" height="548" alt="Сноуборд">
             </div>
-            <p class="lot-item__category">Категория: <span><?php echo $lot['name'] ?></span></p>
-            <p class="lot-item__description"><?php echo $lot['description'] ?></p>
+            <p class="lot-item__category">Категория: <span><?= $lot['name'] ?></span></p>
+            <p class="lot-item__description"><?= $lot['description'] ?></p>
         </div>
         <div class="lot-item__right">
             <div class="lot-item__state">
@@ -29,15 +29,15 @@
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">
                             <span class="lot-item__amount">Текущая цена</span>
-                            <span class="lot-item__cost"><?php echo price_format($lot['starting_price'], null) ?></span>
+                            <span class="lot-item__cost"><?= price_format($lot['starting_price'], null) ?></span>
                         </div>
                         <div class="lot-item__min-cost">
                             Мин. ставка
-                            <span><?php echo price_format(($lot['starting_price'] + $lot['bet_step']), 'р') ?></span>
+                            <span><?= price_format(($lot['starting_price'] + $lot['bet_step']), 'р') ?></span>
                         </div>
                     </div>
                 <?php endif; ?>
-                <?php if (isset($bets[0]) && $bets[0]['bets_user_id'] = $_SESSION['user']['id']) : ?>
+                <?php if (isset($bets[0]) && isset($_SESSION['user']) && $bets[0]['bets_user_id'] == $_SESSION['user']['id']) : ?>
                     <?= 'Ваша ставка была последней' ?>
                 <?php elseif (isset($_SESSION['user']) && ($_SESSION['user']['login'] !== $lot['login']) && (strtotime($lot['completed_at']) > time())) : ?>
                     <form class="lot-item__form <?= isset($errors) ? "form--invalid" : ""; ?>" action=""
@@ -47,7 +47,7 @@
                             <label for="cost">Ваша ставка</label>
                             <?php $value = isset($_POST['price']) ? $_POST['price'] : "" ?>
                             <input id="cost" type="text" name="price"
-                                   placeholder="<?php echo price_format(($lot['starting_price'] + $lot['bet_step']),
+                                   placeholder="<?= price_format(($lot['starting_price'] + $lot['bet_step']),
                                        null) ?>" value="<?= esc($value); ?>">
                             <?php if (isset($errors['price'])) : ?>
                                 <span class="form__error"><?= $errors['price']; ?></span>

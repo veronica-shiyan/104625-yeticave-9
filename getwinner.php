@@ -7,10 +7,7 @@ $this_time = time();
 $winners = get_winners($link, $this_time);
 
 if (isset($winners)) {
-    foreach ($winners as $item) {
-        $sql = 'UPDATE lots SET winner_id = ' . $item['bets_user_id'] . ' WHERE id = ' . $item['id'];
-        $res = mysqli_query($link, $sql);
-    }
+    $res = update_winner_id ($link, $winners);
 
     $transport = new Swift_SmtpTransport('phpdemo.ru', 25);
     $transport->setUsername('keks@phpdemo.ru');

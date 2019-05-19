@@ -1,5 +1,5 @@
 <form class="form form--add-lot container <?= isset($errors) ? "form--invalid" : ""; ?>" action="" method="post"
-      enctype="multipart/form-data"><!-- form--invalid -->
+      enctype="multipart/form-data">
     <h2>Добавление лота</h2>
     <div class="form__container-two">
         <div class="form__item <?= isset($errors['title']) ? "form__item--invalid" : ""; ?>">

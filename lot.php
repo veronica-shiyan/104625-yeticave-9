@@ -5,11 +5,11 @@ session_start();
 $link = db_connect($db_data);
 $categories = get_categories($link);
 $id = isset($_GET['tab']) ? (int)$_GET['tab'] : 0;
-$lots = get_lots_on_id ($link, $id);
+$lot = get_lots_on_id ($link, $id);
 $bets = get_bets ($link, $id);
+$bet_price = $lot['starting_price'] + $lot['bet_step'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $lot = $lots[0];
     $form = $_POST;
     $required = ['price'];
     $errors = [];
@@ -17,11 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($_POST['price'])) {
         $errors['price'] = 'Укажите Вашу ставку';
     } else {
-        if (!is_numeric($_POST['price']) || $_POST['price'] % 1 !== 0) {
-            $errors['price'] = 'Ставка должна быть целым числом больше ноля';
-        } elseif ($_POST['price'] < ($lot['starting_price'] + $lot['bet_step'])) {
-                $errors['price'] = 'Увеличьте Вашу ставку';
-        }
+        $errors = validation_bet_value ('price', $errors, $bet_price);
+        $errors = validation_integer (['price'], $errors);
     }
 
     if (count($errors)) {
@@ -29,22 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'errors' => $errors
         ]);
     } else {
-        $sql = 'INSERT INTO bets (price, bets_user_id, lot_id) VALUES (?, ?, ?)';
         $data = [$form['price'], $_SESSION['user']['id'], $id];
-        $stmt = db_get_prepare_stmt($link, $sql, $data);
-        $res = mysqli_stmt_execute($stmt);
-
+        $res = add_bets ($link, $data);
         if ($res) {
-            $sql = 'UPDATE lots SET starting_price = ' . $form['price'] . ' WHERE id = ' . $id;
-            $res = mysqli_query($link, $sql);
+            $res = update_price ($link, $id);
             header("Location: /my_bets.php");
             exit();
         }
     }
 }
 
-if ($lots) {
-    $lot = $lots[0];
+if ($lot) {
     $content = include_template('lot.php', [
         'categories' => $categories,
         'lot' => $lot,

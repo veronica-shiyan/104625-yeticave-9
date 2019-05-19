@@ -9,7 +9,7 @@ $id = isset($_GET['tab']) ? (int)$_GET['tab'] : 1;
 if ($id > count($categories)) {
     $id = 1;
 }
-$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;;
+$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $page_items = 9;
 $items_count = get_items($link, $this_time, $id);
 $pages_count = ceil($items_count / $page_items);

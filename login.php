@@ -17,9 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!count($errors)) {
         $email = mysqli_real_escape_string($link, $form['email']);
-        $sql = "SELECT * FROM users WHERE email = '$email'";
-        $res = mysqli_query($link, $sql);
-
+        $res = validation_is_email ($link, $email, '*');
         $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
         if (!count($errors) and $user) {

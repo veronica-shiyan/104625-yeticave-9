@@ -13,39 +13,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required = ['email', 'password', 'login', 'contact'];
     $errors = [];
 
-    foreach ($_POST as $key => $value) {
-        if ($key == 'email') {
-            if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                $errors[$key] = 'Некорректное значение email';
-            }
-        }
-    }
-
-// Проверка заполнения обязательных полей
+    //Проверка, что значение является корректным e-mail
+    $errors = validation_email($errors);
+    // Проверка заполнения обязательных полей
     $errors = validation_required_fields ($required, $errors);
-
     // Проверка загрузки файла
-    if (isset($_FILES['avatar']['name']) && $_FILES['avatar']['name'] !== "") {
+    $errors = validation_file_type ('avatar', $errors);
+    if (isset($errors['file']) && $errors['file'] === 'Вы не загрузили файл') {
+        unset($errors['file']);
+        $form['avatar'] = 'img/user.png';
+    } else {
         $tmp_name = $_FILES['avatar']['tmp_name'];
         $path = $_FILES['avatar']['name'];
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $file_type = finfo_file($finfo, $tmp_name);
-        // Проверка типа файла
-        if ($file_type !== "image/jpeg" && $file_type !== "image/png") {
-            $errors['file'] = 'Загрузите картинку в формате jpg, jpeg или png';
-        } else {
-            move_uploaded_file($tmp_name, 'uploads/' . $path);
-            $form['avatar'] = 'uploads/' . $path;
-        }
-    } else {
-        $form['avatar'] = 'img/user.png';
+        move_uploaded_file($tmp_name, 'uploads/' . $path);
+        $form['avatar'] = 'uploads/' . $path;
     }
-
-// Проверка существования пользователя с email из формы
+    // Проверка существования пользователя с email из формы
     $email = mysqli_real_escape_string($link, $form['email']);
-    $sql = "SELECT id FROM users WHERE email = '$email'";
-    $res = mysqli_query($link, $sql);
-
+    $res = validation_is_email ($link, $email, 'id');
     if (mysqli_num_rows($res) > 0) {
         $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
     } else {
@@ -58,11 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'errors' => $errors
         ]);
     } else {
-        $sql = 'INSERT INTO users (email, login, password, contact, avatar) VALUES (?, ?, ?, ?, ?)';
         $data = [$form['email'], $form['login'], $password, $form['contact'], $form['avatar']];
-        $stmt = db_get_prepare_stmt($link, $sql, $data);
-        $res = mysqli_stmt_execute($stmt);
-
+        $res = add_user($link, $data);
         if ($res) {
             header("Location: login.php");
             exit();
