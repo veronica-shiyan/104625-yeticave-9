@@ -18,8 +18,9 @@
             <a class="main-header__logo" href="index.php">
                 <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
             </a>
-            <form class="main-header__search" method="get" action="search.php" autocomplete="off" style="width: auto; flex-grow: 1">
-                <?php $value = isset($_GET['search']) ? $_GET['search'] : "" ?>
+            <form class="main-header__search" method="get" action="search.php" autocomplete="off"
+                  style="width: auto; flex-grow: 1">
+                <?php $value = isset($_GET['search']) ? trim(esc($_GET['search'])) : "" ?>
                 <input type="search" name="search" placeholder="Поиск лота" value="<?= $value; ?>">
                 <input class="main-header__search-btn" type="submit" name="find" value="Найти">
             </form>
@@ -28,7 +29,7 @@
             <nav class="user-menu" style="align-items: center">
                 <?php if ($is_auth) : ?>
                     <div class="user-menu__logged">
-                        <p> <?php echo $user_name ?> </p>
+                        <p> <?= $user_name ?> </p>
                         <a class="user-menu__bets" href="/my_bets.php">Мои ставки</a>
                         <a class="user-menu__logout" href="/logout.php">Выход</a>
                     </div>
@@ -60,7 +61,7 @@
                     <?php foreach ($categories as $index => $item) : ?>
                         <li class="promo__item <?= 'promo__item--' . $item['symbol_code'] ?>">
                             <a class="promo__link"
-                               href="all_lots.php?tab=<?= $item['id'] ?>"><?php echo esc($item['name']) ?></a>
+                               href="all_lots.php?tab=<?= $item['id'] ?>"><?= esc($item['name']) ?></a>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -70,7 +71,7 @@
                 <ul class="nav__list container">
                     <?php foreach ($categories as $index => $item) : ?>
                         <li class="nav__item">
-                            <a href="all_lots.php?tab=<?= $item['id'] ?>"><?php echo $item['name'] ?></a>
+                            <a href="all_lots.php?tab=<?= $item['id'] ?>"><?= $item['name'] ?></a>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -85,7 +86,7 @@
         <ul class="nav__list container">
             <?php foreach ($categories as $index => $item) : ?>
                 <li class="nav__item">
-                    <a href="all_lots.php?tab=<?= $item['id'] ?>"><?php echo $item['name'] ?></a>
+                    <a href="all_lots.php?tab=<?= $item['id'] ?>"><?= $item['name'] ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>

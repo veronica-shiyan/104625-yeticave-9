@@ -4,9 +4,9 @@ VALUES ('Доски и лыжи', 'boards'), ('Крепления', 'attachment'
 INSERT INTO users
 SET created_at = (NOW() - INTERVAL 1 HOUR), email = 'bigfoot@yandex.ru', login = 'Bigfoot', password = '$2y$10$yOclgovE5V0SWiygs4xBbeFZblXpzC1K/40Ft/FBMD7SnTuq0tzKa', avatar = 'img/avatar.jpg', contact = '+700 0999 999; email: bigfoot@yandex.ru';
 INSERT INTO users
-SET created_at = (NOW() - INTERVAL 1 HOUR), email = 'GingerRonny@yandex.ru', login = 'Main_Yeti', password = '$2y$10$cM5nVoQjSTr2fId0M4CtsOMevkabSfSuk5ms3p48zFQSqme/V65We', avatar = 'img/user.jpg', contact = '+788 2885 255; email: main_Yeti@mail.ru';
+SET created_at = (NOW() - INTERVAL 1 HOUR), email = 'main_Yeti@mail.ru', login = 'Main_Yeti', password = '$2y$10$cM5nVoQjSTr2fId0M4CtsOMevkabSfSuk5ms3p48zFQSqme/V65We', avatar = 'img/user.jpg', contact = '+788 2885 255; email: main_Yeti@mail.ru';
 INSERT INTO users
-SET created_at = (NOW() - INTERVAL 1 HOUR), email = 'veronica.shiyan@gmail.com', login = 'Skier', password = '$2y$10$ouRSc5wOHsasV/799.lNiOYnlhr5.e5IXzu.WR/aZQ2v0h.pxziD2', contact = '+755 63636 894; email: skier@gmail.com';
+SET created_at = (NOW() - INTERVAL 1 HOUR), email = 'skier@gmail.com', login = 'Skier', password = '$2y$10$ouRSc5wOHsasV/799.lNiOYnlhr5.e5IXzu.WR/aZQ2v0h.pxziD2', contact = '+755 63636 894; email: skier@gmail.com';
 
 INSERT INTO lots
 SET created_at = (NOW() - INTERVAL 30 MINUTE), title = '2014 Rossignol District Snowboard', description = 'Сноуборд DISTRICT AMPTEK от известного французского производителя ROSSIGNOL, разработанный специально для начинающих фрирайдеров. Эта доска отлично подойдёт как для обычного склона, так и для парка, а также для обучения. В доступном по цене сноуборде DISTRICT AMPTEK применены современные технологии, которые удачно сочетаются, обеспечивая при этом отличные рабочие характеристики и комфорт. Он оптимален для тех, кто хочет быстро повысить свой уровень техники и мастерства. Классическая твин-тип форма позволяет кататься в разных стойках. За устойчивость и стабильность отвечает стандартный прогиб, он гарантирует жесткую хватку кантов. Высокие рокеры Amptek Auto-Turn обеспечивают легкость управления доской и четкое вхождение в повороты.', image = 'img/lot-1.jpg', starting_price = 10999, completed_at = (created_at + INTERVAL 25 HOUR), bet_step = 500, user_id = 1, category_id = 1;
@@ -30,8 +30,6 @@ INSERT INTO bets
 SET bets_created_at = (NOW() - INTERVAL 5 MINUTE), price = 6000, bets_user_id = 3, lot_id = 6;
 INSERT INTO bets
 SET bets_created_at = (NOW() - INTERVAL 1 MINUTE), price = 7000, bets_user_id = 2, lot_id = 6;
-
-
 
 /*Получить все категории*/
 SELECT * FROM categories;

@@ -1,27 +1,23 @@
 <?php
 require_once('database.php');
+session_start();
+
+$link = db_connect($db_data);
+$categories = get_categories($link);
 
 $content = include_template('login.php', [
-    'categories' => get_categories($link)
+    'categories' => $categories
 ]);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
-
     $required = ['email', 'password'];
     $errors = [];
-
-    foreach ($required as $key) {
-        if (empty($_POST[$key])) {
-            $errors[$key] = 'Это поле надо заполнить';
-        }
-    }
+    $errors = validation_required_fields($required, $errors);
 
     if (!count($errors)) {
         $email = mysqli_real_escape_string($link, $form['email']);
-        $sql = "SELECT * FROM users WHERE email = '$email'";
-        $res = mysqli_query($link, $sql);
-
+        $res = validation_is_email($link, $email, '*');
         $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
         if (!count($errors) and $user) {
@@ -37,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (count($errors)) {
         $content = include_template('login.php', [
-            'categories' => get_categories($link),
+            'categories' => $categories,
             'form' => $form,
             'errors' => $errors
         ]);
@@ -47,12 +43,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$layout_data = [
+$layout_content = include_template('layout.php', [
     'content' => $content,
     'title' => 'Вход',
     'is_auth' => false,
     'user_name' => '',
-    'categories' => get_categories($link),
+    'categories' => $categories,
     'main_classname' => null
-];
-create_layout($layout_data);
+]);
+print($layout_content);
