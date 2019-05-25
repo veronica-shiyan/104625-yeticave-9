@@ -5,7 +5,7 @@ session_start();
 $link = db_connect($db_data);
 $categories = get_categories($link);
 $this_time = time();
-$search = isset($_GET['search']) ? trim(esc($_GET['search'])) : '';
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
 if ($search) {
     $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;

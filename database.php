@@ -105,6 +105,7 @@ ORDER BY created_at DESC LIMIT 6';
  */
 function get_items($link, $time, $id)
 {
+    $id = mysqli_real_escape_string($link, $id);
     $result = mysqli_query($link, 'SELECT COUNT(*) as cnt FROM lots 
 INNER JOIN categories ON lots.category_id = categories.id 
 WHERE unix_timestamp(lots.completed_at) > ' . $time . ' AND categories.id = ' . $id);
@@ -124,6 +125,8 @@ WHERE unix_timestamp(lots.completed_at) > ' . $time . ' AND categories.id = ' . 
  */
 function get_lots_in_category($link, $time, $id, $page_items, $offset)
 {
+    $id = mysqli_real_escape_string($link, $id);
+
     if (!$link) {
         return show_queries_error(mysqli_connect_error());
     } else {
@@ -145,6 +148,7 @@ ORDER BY created_at DESC LIMIT ' . $page_items . ' OFFSET ' . $offset;
  */
 function get_lots_on_id($link, $id)
 {
+    $id = mysqli_real_escape_string($link, $id);
     if (!$link) {
         return show_queries_error(mysqli_connect_error());
     } else {
@@ -171,6 +175,7 @@ WHERE lots.id = ' . $id;
  */
 function get_bets($link, $id)
 {
+    $id = mysqli_real_escape_string($link, $id);
     if (!$link) {
         return show_queries_error(mysqli_connect_error());
     } else {
@@ -216,6 +221,7 @@ AND  b.price = l.starting_price';
  */
 function get_user_bets($link, $user_id)
 {
+    $user_id = mysqli_real_escape_string($link, $user_id);
     if (!$link) {
         return show_queries_error(mysqli_connect_error());
     } else {
@@ -389,7 +395,7 @@ function add_bets($link, $data)
 }
 
 /**
- * Записывает новую цену лота полученную из формы "Добавление ставки" в БД через подготовленное выражение
+ * Записывает новую цену лота полученную из формы "Добавление ставки" в БД
  *
  * @param object $link Объект, представляющий подключение к серверу MySQL
  * @param int $id Значение id лота
@@ -398,6 +404,7 @@ function add_bets($link, $data)
  */
 function update_price($link, $id)
 {
+    $id = mysqli_real_escape_string($link, $id);
     if (!$link) {
         return show_queries_error(mysqli_connect_error());
     } else {
