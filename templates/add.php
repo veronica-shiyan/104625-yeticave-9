@@ -14,7 +14,7 @@
             <select id="category" name="category_id">
                 <option disabled selected>Выберите категорию</option>
                 <?php foreach ($categories as $key) : ?>
-                    <option value="<?= $key['id'] ?>"><?= $key['name'] ?></option>
+                    <option value="<?= esc($key['id']) ?>"><?= esc($key['name']) ?></option>
                 <?php endforeach; ?>
             </select>
             <span class="form__error"><?= $errors['category_id']; ?></span>

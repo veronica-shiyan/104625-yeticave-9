@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?php echo $title ?></title>
+    <title><?= $title ?></title>
     <link href="../css/normalize.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/flatpickr.min.css" rel="stylesheet">
@@ -20,8 +20,8 @@
             </a>
             <form class="main-header__search" method="get" action="search.php" autocomplete="off"
                   style="width: auto; flex-grow: 1">
-                <?php $value = isset($_GET['search']) ? trim(esc($_GET['search'])) : "" ?>
-                <input type="search" name="search" placeholder="Поиск лота" value="<?= $value; ?>">
+                <?php $value = isset($_GET['search']) ? $_GET['search'] : "" ?>
+                <input type="search" name="search" placeholder="Поиск лота" value="<?= trim(esc($value)); ?>">
                 <input class="main-header__search-btn" type="submit" name="find" value="Найти">
             </form>
             <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
@@ -29,12 +29,12 @@
             <nav class="user-menu" style="align-items: center">
                 <?php if ($is_auth) : ?>
                     <div class="user-menu__logged">
-                        <p> <?= $user_name ?> </p>
+                        <p> <?= esc($user_name) ?> </p>
                         <a class="user-menu__bets" href="/my_bets.php">Мои ставки</a>
                         <a class="user-menu__logout" href="/logout.php">Выход</a>
                     </div>
                     <a class="user-menu_avatar" href="#" style="margin-left: 15px">
-                        <img src="<?= $_SESSION['user']['avatar'] ?>" width="70" height="70" alt="Аватар"
+                        <img src="<?= esc($_SESSION['user']['avatar']) ?>" width="70" height="70" alt="Аватар"
                              style="border-radius: 50%">
                     </a>
                 <?php else : ?>
@@ -50,7 +50,7 @@
             </nav>
         </div>
     </header>
-    <main <?php echo isset($main_classname) ? 'class="' . $main_classname . '"' : null ?>>
+    <main <?= isset($main_classname) ? 'class="' . $main_classname . '"' : null ?>>
         <?php if ($main_classname): ?>
             <section class="promo">
                 <h2 class="promo__title">Нужен стафф для катки?</h2>
@@ -59,9 +59,9 @@
                     снаряжение.</p>
                 <ul class="promo__list">
                     <?php foreach ($categories as $index => $item) : ?>
-                        <li class="promo__item <?= 'promo__item--' . $item['symbol_code'] ?>">
+                        <li class="promo__item <?= 'promo__item--' . esc($item['symbol_code']) ?>">
                             <a class="promo__link"
-                               href="all_lots.php?tab=<?= $item['id'] ?>"><?= esc($item['name']) ?></a>
+                               href="all_lots.php?tab=<?= esc($item['id']) ?>"><?= esc($item['name']) ?></a>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -71,7 +71,7 @@
                 <ul class="nav__list container">
                     <?php foreach ($categories as $index => $item) : ?>
                         <li class="nav__item">
-                            <a href="all_lots.php?tab=<?= $item['id'] ?>"><?= $item['name'] ?></a>
+                            <a href="all_lots.php?tab=<?= esc($item['id']) ?>"><?= esc($item['name']) ?></a>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -86,7 +86,7 @@
         <ul class="nav__list container">
             <?php foreach ($categories as $index => $item) : ?>
                 <li class="nav__item">
-                    <a href="all_lots.php?tab=<?= $item['id'] ?>"><?= $item['name'] ?></a>
+                    <a href="all_lots.php?tab=<?= esc($item['id']) ?>"><?= esc($item['name']) ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>
